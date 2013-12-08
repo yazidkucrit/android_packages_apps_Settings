@@ -206,6 +206,8 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
             mSwapVolumeButtons.setChecked(swapVolumeKeys > 0);*/
             if (!res.getBoolean(R.bool.config_show_volumeRockerWake)) {
                 volumeCategory.removePreference(findPreference(Settings.System.VOLUME_WAKE_SCREEN));
+                // Nothing else,we'd remove the title either for now
+                prefScreen.removePreference(volumeCategory);
             }
         } else {
             prefScreen.removePreference(volumeCategory);
