@@ -20,6 +20,8 @@
     <string name="reset">重置</string>
     <string name="profile_choose_app">选择应用</string>
     <string name="profiles_add">添加</string>
+    <string name="profile_reset_title">重置</string>
+    <string name="profile_reset_message">删除所有修改并恢复为默认？</string>
     
     <string name="settings_additional_category">其他</string>
     <string name="volume_key_cursor_control_title">音量键光标控制</string>
@@ -58,6 +60,12 @@
     <string name="pulse_speed_normal">正常</string>
     <string name="pulse_speed_slow">较慢</string>
     <string name="pulse_speed_very_slow">非常慢</string>
+    <string name="battery_light_title">电量指示灯</string>
+    <string name="battery_low_pulse_title">电量低时指示</string>
+    <string name="battery_light_list_title">颜色</string>
+    <string name="battery_light_low_color_title">电量低</string>
+    <string name="battery_light_medium_color_title">充电时</string>
+    <string name="battery_light_full_color_title">已充满</string>
     <string name="volume_adjust_sounds_enable_summary">使用音量键调整音量时将播放提示音</string>
     <string name="link_volume_ringtones">链接铃声与通知的音量</string>
     <string name="link_volume_mutes">静音模式将会影响通知</string>
