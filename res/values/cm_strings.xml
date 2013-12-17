@@ -150,6 +150,7 @@
 
     <!-- Hardware keys -->
     <string name="button_settings">Buttons</string>
+    <string name="button_keys_title">Keys</string>
     <string name="hardware_keys_home_key_title">Home button</string>
     <string name="hardware_keys_menu_key_title">Menu button</string>
     <string name="hardware_keys_assist_key_title">Search button</string>
@@ -182,6 +183,8 @@
     <string name="volbtn_cursor_control_on_reverse">Volume up/down moves cursor right/left</string>
     <string name="swap_volume_buttons_title">Reorient volume buttons</string>
     <string name="swap_volume_buttons_summary">Swap volume buttons when the screen is rotated</string>
+    <string name="virtual_key_haptic_feedback_title">Vibrate on touch</string>
+    <string name="virtual_key_haptic_feedback_summary">Enable depends on \"Vibrate on touch\" in sound settings</string>
 
     <!-- Hardware tunables - Key backlight -->
     <string name="button_backlight_title">Backlight</string>

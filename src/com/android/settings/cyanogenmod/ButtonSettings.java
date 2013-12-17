@@ -18,7 +18,9 @@ package com.android.settings.cyanogenmod;
 
 import android.content.ContentResolver;
 import android.content.res.Resources;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -44,6 +46,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private static final String KEY_SWAP_VOLUME_BUTTONS = "swap_volume_buttons";
     private static final String KEY_VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
     private static final String KEY_BLUETOOTH_INPUT_SETTINGS = "bluetooth_input_settings";
+    private static final String VIRTUAL_KEY_HAPTIC_FEEDBACK = "virtual_key_haptic_feedback";
 
     private static final String CATEGORY_HOME = "home_key";
     private static final String CATEGORY_MENU = "menu_key";
@@ -80,6 +83,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private ListPreference mAppSwitchLongPressAction;
     private ListPreference mVolumeKeyCursorControl;
     private CheckBoxPreference mSwapVolumeButtons;
+    private CheckBoxPreference mVirtualKeyHapticFeedback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
                 (PreferenceCategory) prefScreen.findPreference(CATEGORY_APPSWITCH);
         final PreferenceCategory volumeCategory =
                 (PreferenceCategory) prefScreen.findPreference(CATEGORY_VOLUME);
+        mVirtualKeyHapticFeedback = (CheckBoxPreference) prefScreen.findPreference(VIRTUAL_KEY_HAPTIC_FEEDBACK);
 
         if (hasHomeKey) {
             if (!res.getBoolean(R.bool.config_show_homeWake)) {
@@ -216,6 +221,15 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
 
         Utils.updatePreferenceToSpecificActivityFromMetaDataOrRemove(getActivity(),
                 getPreferenceScreen(), KEY_BLUETOOTH_INPUT_SETTINGS);
+
+
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator == null || !vibrator.hasVibrator()) {
+            removePreference(VIRTUAL_KEY_HAPTIC_FEEDBACK);
+        } else {
+            mVirtualKeyHapticFeedback.setChecked(Settings.System.getInt(resolver,
+                    Settings.System.VIRTUAL_KEYS_HAPTIC_FEEDBACK, 1) == 1);
+        }
     }
 
     private ListPreference initActionList(String key, int value) {
@@ -284,6 +298,12 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
                     ? (Utils.isTablet(getActivity()) ? 2 : 1) : 0;
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION, value);
+        } else if (preference == mVirtualKeyHapticFeedback){
+            boolean checked = ((CheckBoxPreference)preference).isChecked();
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.VIRTUAL_KEYS_HAPTIC_FEEDBACK, checked ? 1:0);
+
+            return true;
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
