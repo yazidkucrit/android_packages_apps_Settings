@@ -26,9 +26,27 @@
             android:summary="@string/unlock_set_unlock_mode_none"
             android:persistent="false"/>
 
-        <CheckBoxPreference
+        <PreferenceScreen
             android:key="keyguard_enable_widgets"
-            android:title="@string/security_enable_widgets_title"/>
+            android:fragment="com.android.settings.AOSPAL.LockscreenWidgets"
+            android:title="@string/lockscreen_widgets_title"/>
+
+        <CheckBoxPreference
+            android:key="battery_around_lockscreen_ring"
+            android:title="@string/battery_around_lockscreen_ring"
+            android:defaultValue="true" />
+
+        <ListPreference
+            android:key="lock_after_timeout"
+            android:title="@string/lock_after_timeout"
+            android:summary="@string/lock_after_timeout_summary"
+            android:entries="@array/lock_after_timeout_entries"
+            android:entryValues="@array/lock_after_timeout_values"
+            android:persistent="false"/>
+
+        <CheckBoxPreference
+            android:key="power_button_instantly_locks"
+            android:title="@string/lockpattern_settings_enable_power_button_instantly_locks"/>
 
         <PreferenceScreen
             android:fragment="com.android.settings.OwnerInfoSettings"
@@ -40,6 +58,17 @@
             android:key="see_through"
             android:title="@string/see_through_title"
             android:summary="@string/see_through_summary" />
+
+        <SeekBarPreference
+            android:key="blur_radius"
+            android:title="@string/blur_radius_title"
+            android:summary="@string/blur_radius_summary"
+            android:max="25"
+            android:defaultValue="12" />
+
+        <PreferenceScreen
+            android:title="@string/lockscreen_notifications"
+            android:fragment="com.android.settings.AOSPAL.LockscreenNotifications" />
 
     </PreferenceCategory>
 

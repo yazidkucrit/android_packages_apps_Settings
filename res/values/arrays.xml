@@ -52,6 +52,7 @@
     <string-array name="screen_timeout_entries">
         <item>15 seconds</item>
         <item>30 seconds</item>
+        <item>45 seconds</item>
         <item>1 minute</item>
         <item>2 minutes</item>
         <item>5 minutes</item>
@@ -65,6 +66,8 @@
         <item>15000</item>
         <!-- Do not translate. -->
         <item>30000</item>
+        <!-- Do not translate. -->
+        <item>45000</item>
         <!-- Do not translate. -->
         <item>60000</item>
         <!-- Do not translate. -->
@@ -82,6 +85,7 @@
         <item>Never</item>
         <item>15 seconds</item>
         <item>30 seconds</item>
+        <item>45 seconds</item>
         <item>1 minute</item>
         <item>2 minutes</item>
         <item>5 minutes</item>
@@ -97,6 +101,8 @@
         <item>15000</item>
         <!-- Do not translate. -->
         <item>30000</item>
+        <!-- Do not translate. -->
+        <item>45000</item>
         <!-- Do not translate. -->
         <item>60000</item>
         <!-- Do not translate. -->
@@ -116,6 +122,7 @@
         <item>5 seconds</item>
         <item>15 seconds</item>
         <item>30 seconds</item>
+        <item>45 seconds</item>
         <item>1 minute</item>
         <item>2 minutes</item>
         <item>5 minutes</item>
@@ -133,6 +140,8 @@
         <item>15000</item>
         <!-- Do not translate. -->
         <item>30000</item>
+        <!-- Do not translate. -->
+        <item>45000</item>
         <!-- Do not translate. -->
         <item>60000</item>
         <!-- Do not translate. -->
@@ -915,7 +924,9 @@
     <!-- Titles for window animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="window_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -926,7 +937,9 @@
     <!-- Values for window animation scale preference. -->
     <string-array name="window_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -937,7 +950,9 @@
     <!-- Titles for transition animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="transition_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -948,7 +963,9 @@
     <!-- Values for transition animation scale preference. -->
     <string-array name="transition_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -959,7 +976,9 @@
     <!-- Titles for animator duration scale preference. [CHAR LIMIT=35] -->
     <string-array name="animator_duration_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -970,7 +989,9 @@
     <!-- Values for animator duration scale preference. -->
     <string-array name="animator_duration_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -1161,6 +1182,24 @@
         <item>low</item>
         <!-- Memory is critical. -->
         <item>critical</item>
+    </string-array>
+    
+    <!-- Data usage settings.  Entries for cycle length. -->
+    <string-array name="data_usage_cycle_length">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+    
+    <!-- Data usage settings.  Weekdays -->
+    <string-array name="data_usage_cycle_weekdays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Fryday</item>
+        <item>Saturday</item>
     </string-array>
 
 </resources>

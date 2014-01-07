@@ -67,10 +67,6 @@ import android.widget.TabWidget;
 
 import com.android.settings.users.ProfileUpdateReceiver;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,8 +76,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class Utils {
-
-    private static final String TAG = "Utils";
 
     /**
      * Set the preference's title to the matching activity's label.
@@ -99,14 +93,6 @@ public class Utils {
      */
     private static final String META_DATA_PREFERENCE_ICON = "com.android.settings.icon";
 
-    // Device types
-    private static final int DEVICE_PHONE = 0;
-    private static final int DEVICE_HYBRID = 1;
-    private static final int DEVICE_TABLET = 2;
-
-    // Device type reference
-    private static int sDeviceType = -1;
-
     /**
      * Name of the meta-data item that should be set in the AndroidManifest.xml
      * to specify the title that should be displayed for the preference.
@@ -118,6 +104,14 @@ public class Utils {
      * to specify the summary text that should be displayed for the preference.
      */
     private static final String META_DATA_PREFERENCE_SUMMARY = "com.android.settings.summary";
+
+    // Device types
+    private static final int DEVICE_PHONE = 0;
+    private static final int DEVICE_HYBRID = 1;
+    private static final int DEVICE_TABLET = 2;
+
+    // Device type reference
+    private static int mDeviceType = -1;
 
     /**
      * Finds a matching activity for a preference's intent. If a matching
@@ -198,7 +192,8 @@ public class Utils {
     public static boolean updatePreferenceToSpecificActivityFromMetaDataOrRemove(Context context,
             PreferenceGroup parentPreferenceGroup, String preferenceKey) {
 
-        Preference preference = parentPreferenceGroup.findPreference(preferenceKey);
+        IconPreferenceScreen preference = (IconPreferenceScreen)parentPreferenceGroup
+                .findPreference(preferenceKey);
         if (preference == null) {
             return false;
         }
@@ -224,9 +219,7 @@ public class Utils {
                         Bundle metaData = resolveInfo.activityInfo.metaData;
 
                         if (res != null && metaData != null) {
-                            if (preference instanceof IconPreferenceScreen) {
-                                icon = res.getDrawable(metaData.getInt(META_DATA_PREFERENCE_ICON));
-                            }
+                            icon = res.getDrawable(metaData.getInt(META_DATA_PREFERENCE_ICON));
                             title = res.getString(metaData.getInt(META_DATA_PREFERENCE_TITLE));
                             summary = res.getString(metaData.getInt(META_DATA_PREFERENCE_SUMMARY));
                         }
@@ -243,12 +236,9 @@ public class Utils {
                     }
 
                     // Set icon, title and summary for the preference
+                    preference.setIcon(icon);
                     preference.setTitle(title);
                     preference.setSummary(summary);
-                    if (preference instanceof IconPreferenceScreen) {
-                        IconPreferenceScreen iconPreference = (IconPreferenceScreen) preference;
-                        iconPreference.setIcon(icon);
-                    }
 
                     // Replace the intent with this specific activity
                     preference.setIntent(new Intent().setClassName(
@@ -469,7 +459,8 @@ public class Utils {
             ((PreferenceFrameLayout.LayoutParams) child.getLayoutParams()).removeBorders = true;
 
             final Resources res = list.getResources();
-            final int paddingSide = res.getDimensionPixelSize(R.dimen.settings_side_margin);
+            final int paddingSide = res.getDimensionPixelSize(
+                    com.android.internal.R.dimen.preference_fragment_padding_side);
             final int paddingBottom = res.getDimensionPixelSize(
                     com.android.internal.R.dimen.preference_fragment_padding_bottom);
 
@@ -506,43 +497,6 @@ public class Utils {
         } else {
             return R.string.tether_settings_title_bluetooth;
         }
-    }
-
-    public static boolean fileExists(String filename) {
-        return new File(filename).exists();
-    }
-
-    public static String fileReadOneLine(String fname) {
-        BufferedReader br;
-        String line = null;
-
-        try {
-            br = new BufferedReader(new FileReader(fname), 512);
-            try {
-                line = br.readLine();
-            } finally {
-                br.close();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "IO Exception when reading /sys/ file", e);
-        }
-        return line;
-    }
-
-    public static boolean fileWriteOneLine(String fname, String value) {
-        try {
-            FileWriter fw = new FileWriter(fname);
-            try {
-                fw.write(value);
-            } finally {
-                fw.close();
-            }
-        } catch (IOException e) {
-            String Error = "Error writing to " + fname + ". Exception: ";
-            Log.e(TAG, Error, e);
-            return false;
-        }
-        return true;
     }
 
     /* Used by UserSettings as well. Call this on a non-ui thread. */
@@ -662,42 +616,36 @@ public class Utils {
                 .getUsers().size() > 1;
     }
 
-    private static int getScreenType(Context context) {
-        if (sDeviceType == -1) {
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    private static int getScreenType(Context con) {
+        if (mDeviceType == -1) {
+            WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
             DisplayInfo outDisplayInfo = new DisplayInfo();
             wm.getDefaultDisplay().getDisplayInfo(outDisplayInfo);
             int shortSize = Math.min(outDisplayInfo.logicalHeight, outDisplayInfo.logicalWidth);
-            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT
-                    / outDisplayInfo.logicalDensityDpi;
+            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / outDisplayInfo.logicalDensityDpi;
             if (shortSizeDp < 600) {
                 // 0-599dp: "phone" UI with a separate status & navigation bar
-                sDeviceType =  DEVICE_PHONE;
+                mDeviceType =  DEVICE_PHONE;
             } else if (shortSizeDp < 720) {
                 // 600-719dp: "phone" UI with modifications for larger screens
-                sDeviceType = DEVICE_HYBRID;
+                mDeviceType = DEVICE_HYBRID;
             } else {
                 // 720dp: "tablet" UI with a single combined status & navigation bar
-                sDeviceType = DEVICE_TABLET;
+                mDeviceType = DEVICE_TABLET;
             }
         }
-        return sDeviceType;
+        return mDeviceType;
     }
 
-    public static boolean isPhone(Context context) {
-        return getScreenType(context) == DEVICE_PHONE;
+    public static boolean isPhone(Context con) {
+        return getScreenType(con) == DEVICE_PHONE;
     }
 
-    public static boolean isHybrid(Context context) {
-        return getScreenType(context) == DEVICE_HYBRID;
+    public static boolean isHybrid(Context con) {
+        return getScreenType(con) == DEVICE_HYBRID;
     }
 
-    public static boolean isTablet(Context context) {
-        return getScreenType(context) == DEVICE_TABLET;
-    }
-
-    /* returns whether the device has volume rocker or not. */
-    public static boolean hasVolumeRocker(Context context) {
-        return context.getResources().getBoolean(R.bool.has_volume_rocker);
+    public static boolean isTablet(Context con) {
+        return getScreenType(con) == DEVICE_TABLET;
     }
 }

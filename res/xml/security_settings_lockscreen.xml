@@ -26,9 +26,10 @@
             android:summary="@string/unlock_set_unlock_mode_off"
             android:persistent="false"/>
 
-        <CheckBoxPreference
+        <PreferenceScreen
             android:key="keyguard_enable_widgets"
-            android:title="@string/security_enable_widgets_title"/>
+            android:fragment="com.android.settings.AOSPAL.LockscreenWidgets"
+            android:title="@string/lockscreen_widgets_title"/>
 
         <PreferenceScreen
             android:fragment="com.android.settings.OwnerInfoSettings"
@@ -40,6 +41,17 @@
             android:key="see_through"
             android:title="@string/see_through_title"
             android:summary="@string/see_through_summary" />
+
+        <SeekBarPreference
+            android:key="blur_radius"
+            android:title="@string/blur_radius_title"
+            android:summary="@string/blur_radius_summary"
+            android:max="25"
+            android:defaultValue="12" />
+ 
+        <PreferenceScreen
+            android:title="@string/lockscreen_notifications"
+            android:fragment="com.android.settings.AOSPAL.LockscreenNotifications" />
 
     </PreferenceCategory>
 

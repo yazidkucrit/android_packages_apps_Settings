@@ -66,6 +66,7 @@ import com.android.settings.accessibility.ToggleCaptioningPreferenceFragment;
 import com.android.settings.accounts.AccountSyncSettings;
 import com.android.settings.accounts.AuthenticatorHelper;
 import com.android.settings.accounts.ManageAccountsSettings;
+import com.android.settings.AOSPAL.AdditionalSettings;
 import com.android.settings.applications.AppOpsSummary;
 import com.android.settings.applications.ManageApplications;
 import com.android.settings.applications.ProcessStatsUi;
@@ -302,11 +303,6 @@ public class Settings extends PreferenceActivity
         }
     }
 
-    @Override
-    public boolean onIsMultiPane() {
-        return false;
-    }
-
     private static final String[] ENTRY_FRAGMENTS = {
         WirelessSettings.class.getName(),
         WifiSettings.class.getName(),
@@ -352,7 +348,10 @@ public class Settings extends PreferenceActivity
         TrustedCredentialsSettings.class.getName(),
         PaymentSettings.class.getName(),
         KeyboardLayoutPickerFragment.class.getName(),
-        ApnSettings.class.getName()
+        ApnSettings.class.getName(),
+        HomeSettings.class.getName(),
+        AdditionalSettings.class.getName(),
+        AppOpsSummary.class.getName(),
     };
 
     @Override
@@ -600,7 +599,7 @@ public class Settings extends PreferenceActivity
                 if (!showDev) {
                     target.remove(i);
                 }
-            } else if (id == R.id.performance_settings) {
+            } else if (id == R.id.performance_controls) {
                 if (!showDev) {
                     target.remove(i);
                 }
@@ -1131,6 +1130,5 @@ public class Settings extends PreferenceActivity
     public static class PaymentSettingsActivity extends Settings { /* empty */ }
     public static class PrintSettingsActivity extends Settings { /* empty */ }
     public static class PrintJobSettingsActivity extends Settings { /* empty */ }
-    public static class ApnSettingsActivity extends Settings { /* empty */ }
-    public static class ApnEditorActivity extends Settings { /* empty */ }
+    public static class ASSRamBarActivity extends Settings { /* empty */ } 
 }
