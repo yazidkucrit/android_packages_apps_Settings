@@ -616,6 +616,11 @@ public class Utils {
                 .getUsers().size() > 1;
     }
 
+    /* returns whether the device has volume rocker or not. */
+    public static boolean hasVolumeRocker(Context context) {
+        return context.getResources().getBoolean(R.bool.has_volume_rocker);
+    }
+
     private static int getScreenType(Context con) {
         if (mDeviceType == -1) {
             WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
