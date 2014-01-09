@@ -57,7 +57,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_ANIMATION_OPTIONS = "category_animation_options";
     private static final String KEY_POWER_CRT_MODE = "system_power_crt_mode";
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
-    private static final String KEY_ADVANCED_DISPLAY_SETTINGS = "advanced_display_settings";
 
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
@@ -69,7 +68,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private final Configuration mCurConfig = new Configuration();
 
     private PreferenceScreen mNotificationLed;
-
+    
     private ListPreference mScreenTimeoutPreference;
     private Preference mScreenSaverPreference;
 
@@ -154,8 +153,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             getPreferenceScreen().removePreference(animationOptions);
         }
 
-    Utils.updatePreferenceToSpecificActivityFromMetaDataOrRemove(getActivity(),
-                getPreferenceScreen(), KEY_ADVANCED_DISPLAY_SETTINGS);
     }
 
     private void updateTimeoutPreferenceDescription(long currentTimeout) {
