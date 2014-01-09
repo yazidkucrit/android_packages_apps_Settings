@@ -239,6 +239,10 @@ public class Utils {
                     preference.setIcon(icon);
                     preference.setTitle(title);
                     preference.setSummary(summary);
+                    if (preference instanceof IconPreferenceScreen) {
+                        IconPreferenceScreen iconPreference = (IconPreferenceScreen) preference;
+                        iconPreference.setIcon(icon);
+                    }
 
                     // Replace the intent with this specific activity
                     preference.setIntent(new Intent().setClassName(
