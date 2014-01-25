@@ -52,11 +52,11 @@
     <PreferenceCategory
          android:title="@string/navigation_bar">
 
-         <CheckBoxPreference
-            android:key="enable_nav_bar"
-            android:title="@string/navigation_bar"
-            android:summary="@string/navigation_bar_summary"
-            android:defaultValue="true" /> 
+         <SeekBarPreference
+             android:key="navigation_bar_height"
+             android:title="@string/navigation_bar_height"
+             android:max="100"
+             android:defaultValue="100" />
 
          <!-- Navring Targets -->
          <PreferenceScreen
@@ -65,11 +65,17 @@
              android:title="@string/navigation_ring_title"
              android:summary="@string/navigation_ring_summary" />
 
-   </PreferenceCategory>
+        <PreferenceScreen
+            android:fragment="com.android.settings.paranoid.NavBar"
+            android:key="navigation_bar"
+            android:title="@string/navigation_bar_title" />
+
+    </PreferenceCategory>
 
 
    <PreferenceCategory
-          android:title="@string/additional_settings_qs_statusbar_title">
+          android:title="@string/additional_settings_qs_statusbar_title"
+          android:key="qs_statusbar">
 
         <!-- Quick Settings Pulldown -->
         <ListPreference
@@ -80,6 +86,13 @@
             android:entryValues="@array/quick_pulldown_values"
             android:persistent="false" />
 
+        <ListPreference
+            android:key="smart_pulldown"
+            android:title="@string/smart_pulldown_title"
+            android:entries="@array/smart_pulldown_entries"
+            android:entryValues="@array/smart_pulldown_values"
+            android:persistent="false" />
+
         <!-- Network usage stats -->
         <PreferenceScreen
             android:key="network_usage_stats"
@@ -87,6 +100,22 @@
             android:title="@string/status_bar_network_cat"
             android:summary="@string/statusbar_network_summary" /> 
 
+        <com.android.settings.AOSPAL.CustomCarrier
+            android:key="notification_custom_carrier_label"
+            android:title="@string/notification_custom_carrier_label_title"
+            android:dialogTitle="@string/notification_custom_carrier_label_title"
+            android:positiveButtonText="@string/wifi_save"
+            android:negativeButtonText="@string/wifi_cancel"
+            android:selectAllOnFocus="true"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:persistent="false" />
+
+        <PreferenceScreen
+            android:fragment="com.android.settings.slim.StatusBarClockStyle"
+            android:key="clock_style_pref"
+            android:title="@string/status_bar_clock" />
+   
    </PreferenceCategory>
 
     <PreferenceCategory

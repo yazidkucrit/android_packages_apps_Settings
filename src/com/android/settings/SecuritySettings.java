@@ -122,7 +122,7 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private CheckBoxPreference mPowerButtonInstantlyLocks;
 
     private CheckBoxPreference mSeeThrough;
-    
+ 
     private SeekBarPreference mBlurRadius;
 
     private ListPreference mLockNumpadRandom;
@@ -585,7 +585,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
         }
 
         if (mEnableKeyguardWidgets != null) {
-
             if (!lockPatternUtils.getWidgetsEnabled()) {
                 mEnableKeyguardWidgets.setSummary(R.string.disabled);
             } else {
@@ -667,7 +666,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
         } else if (preference == mMaximizeKeyguardWidgets) {
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, isToggled(preference) ? 1 : 0);
->>>>>>> PA/kitkat
         } else if (preference == mShowPassword) {
             Settings.System.putInt(getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD,
                     mShowPassword.isChecked() ? 1 : 0);

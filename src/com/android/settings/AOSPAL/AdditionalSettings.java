@@ -13,15 +13,17 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.SeekBarPreference;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import com.android.settings.Utils;
+import com.android.internal.util.paranoid.DeviceUtils;
 
 public class AdditionalSettings extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private static final String QUICK_PULLDOWN = "quick_pulldown";
+    private static final String SMART_PULLDOWN = "smart_pulldown";
     private static final String CATEGORY_HEADSETHOOK = "button_headsethook";
     private static final String BUTTON_HEADSETHOOK_LAUNCH_VOICE = "button_headsethook_launch_voice";
     private static final String KEY_LISTVIEW_ANIMATION = "listview_animation";
@@ -29,16 +31,18 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
     private static final String KEY_DUAL_PANEL = "force_dualpanel"; 
     private static final String KEY_REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
     private static final String LOCKSCREEN_POWER_MENU = "lockscreen_power_menu";
-    private static final String ENABLE_NAVIGATION_BAR = "enable_nav_bar";
+    private static final String KEY_NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+    private static final String KEY_CATEGORY_QS_STATUSBAR = "qs_statusbar";
 
     ListPreference mQuickPulldown;
+    ListPreference mSmartPulldown;
     private CheckBoxPreference mHeadsetHookLaunchVoice;
     private CheckBoxPreference mLockScreenPowerMenu;
     private CheckBoxPreference mDualPanel;
-    private CheckBoxPreference mEnableNavigationBar;
     private CheckBoxPreference mReverseDefaultAppPicker;
     private ListPreference mListViewAnimation;
     private ListPreference mListViewInterpolator;
+    private SeekBarPreference mNavigationBarHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,14 +53,26 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
         final ContentResolver resolver = getActivity().getContentResolver();
 
         mQuickPulldown = (ListPreference) findPreference(QUICK_PULLDOWN);
-        if (Utils.isTablet(getActivity())) {
-            prefs.removePreference(mQuickPulldown);
-        } else {
-            mQuickPulldown.setOnPreferenceChangeListener(this);
-            int statusQuickPulldown = Settings.System.getIntForUser(getContentResolver(),
-                    Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT);
-            mQuickPulldown.setValue(String.valueOf(statusQuickPulldown));
-            updatePulldownSummary();
+        mSmartPulldown = (ListPreference) findPreference(SMART_PULLDOWN);
+
+        mQuickPulldown.setOnPreferenceChangeListener(this);
+        int statusQuickPulldown = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT);
+        mQuickPulldown.setValue(String.valueOf(statusQuickPulldown));
+        updateQuickPulldownSummary(statusQuickPulldown);
+
+        // Smart Pulldown
+        mSmartPulldown.setOnPreferenceChangeListener(this);
+        int smartPulldown = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.QS_SMART_PULLDOWN, 0, UserHandle.USER_CURRENT);
+        mSmartPulldown.setValue(String.valueOf(smartPulldown));
+        updateSmartPulldownSummary(smartPulldown);
+
+        PreferenceCategory qsStatusbar =
+            (PreferenceCategory) findPreference(KEY_CATEGORY_QS_STATUSBAR);
+        if (!DeviceUtils.isPhone(getActivity())) {
+            qsStatusbar.removePreference(findPreference(QUICK_PULLDOWN));
+            qsStatusbar.removePreference(findPreference(SMART_PULLDOWN));
         }
 
         final PreferenceCategory headsethookCategory =
@@ -97,14 +113,11 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
             mLockScreenPowerMenu.setChecked(Settings.Secure.getInt(getContentResolver(),
                     Settings.Secure.LOCK_SCREEN_POWER_MENU, 1) == 1);
         }
-
-        boolean hasNavBarByDefault = getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
-        boolean enableNavigationBar = Settings.System.getInt(getContentResolver(),
-                Settings.System.NAVIGATION_BAR_SHOW, hasNavBarByDefault ? 1 : 0) == 1;
-        mEnableNavigationBar = (CheckBoxPreference) findPreference(ENABLE_NAVIGATION_BAR);
-        mEnableNavigationBar.setChecked(enableNavigationBar);
-        mEnableNavigationBar.setOnPreferenceChangeListener(this);
+        mNavigationBarHeight = (SeekBarPreference) findPreference(KEY_NAVIGATION_BAR_HEIGHT);
+        mNavigationBarHeight.setProgress((int)(Settings.System.getFloat(getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_HEIGHT, 1f) * 100));
+        mNavigationBarHeight.setTitle(getResources().getText(R.string.navigation_bar_height) + " " + mNavigationBarHeight.getProgress() + "%");
+        mNavigationBarHeight.setOnPreferenceChangeListener(this);
     }
 
     private boolean isToggled(Preference pref) {
@@ -123,8 +136,13 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
             int statusQuickPulldown = Integer.valueOf((String) newValue);
             Settings.System.putIntForUser(getContentResolver(), Settings.System.QS_QUICK_PULLDOWN,
                     statusQuickPulldown, UserHandle.USER_CURRENT);
-            updatePulldownSummary();
+            updateQuickPulldownSummary(statusQuickPulldown);
             return true;
+        } else if (preference == mSmartPulldown) {
+            int smartPulldown = Integer.valueOf((String) newValue);
+            Settings.System.putInt(getContentResolver(), Settings.System.QS_SMART_PULLDOWN,
+                    smartPulldown);
+            updateSmartPulldownSummary(smartPulldown);
         } else if (KEY_LISTVIEW_ANIMATION.equals(key)) {
             int value = Integer.parseInt((String) newValue);
             int index = mListViewAnimation.findIndexOfValue((String) newValue);
@@ -141,13 +159,14 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
                     value);
             mListViewInterpolator.setValue(String.valueOf(value));
             mListViewInterpolator.setSummary(mListViewInterpolator.getEntry());
-        } else if (preference == mEnableNavigationBar) {
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW,
-                    ((Boolean) newValue) ? 1 : 0);
-            return true;
+        } else if (preference == mNavigationBarHeight) {
+            Settings.System.putFloat(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_HEIGHT, (Integer)newValue / 100f);
+            mNavigationBarHeight.setTitle(getResources().getText(R.string.navigation_bar_height) + " " + (Integer)newValue + "%");
+        } else {
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -170,27 +189,31 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
         return true;
     }
 
-    private void updatePulldownSummary() {
-        int summaryId;
-        int directionId;
-        summaryId = R.string.summary_quick_pulldown;
-        String value = String.valueOf(Settings.System.getIntForUser(getContentResolver(),
-                Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT));
-        String[] pulldownArray = getResources().getStringArray(R.array.quick_pulldown_values);
-        if (pulldownArray[0].equals(value)) {
-            directionId = R.string.quick_pulldown_off;
-            mQuickPulldown.setValueIndex(0);
-            mQuickPulldown.setSummary(getResources().getString(directionId));
-        } else if (pulldownArray[1].equals(value)) {
-            directionId = R.string.quick_pulldown_right;
-            mQuickPulldown.setValueIndex(1);
-            mQuickPulldown.setSummary(getResources().getString(directionId)
-                    + " " + getResources().getString(summaryId));
+    private void updateQuickPulldownSummary(int value) {
+        Resources res = getResources();
+
+        if (value == 0) {
+            // quick pulldown deactivated
+            mQuickPulldown.setSummary(res.getString(R.string.quick_pulldown_off));
         } else {
-            directionId = R.string.quick_pulldown_left;
-            mQuickPulldown.setValueIndex(2);
-            mQuickPulldown.setSummary(getResources().getString(directionId)
-                    + " " + getResources().getString(summaryId));
+            String direction = res.getString(value == 2
+                    ? R.string.quick_pulldown_left
+                    : R.string.quick_pulldown_right);
+            mQuickPulldown.setSummary(res.getString(R.string.summary_quick_pulldown, direction));
+        }
+    }
+
+    private void updateSmartPulldownSummary(int value) {
+        Resources res = getResources();
+
+        if (value == 0) {
+            // Smart pulldown deactivated
+            mSmartPulldown.setSummary(res.getString(R.string.smart_pulldown_off));
+        } else {
+            String type = res.getString(value == 2
+                    ? R.string.smart_pulldown_persistent
+                    : R.string.smart_pulldown_dismissable);
+            mSmartPulldown.setSummary(res.getString(R.string.smart_pulldown_summary, type));
         }
     }
 }
