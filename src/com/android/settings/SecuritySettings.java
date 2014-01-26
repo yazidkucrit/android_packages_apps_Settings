@@ -121,8 +121,7 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private CheckBoxPreference mToggleVerifyApps;
     private CheckBoxPreference mPowerButtonInstantlyLocks;
 
-    private CheckBoxPreference mSeeThrough;
- 
+    private CheckBoxPreference mSeeThrough;  
     private SeekBarPreference mBlurRadius;
 
     private ListPreference mLockNumpadRandom;
@@ -590,15 +589,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
             } else {
                 mEnableKeyguardWidgets.setSummary(R.string.enabled);
             }
-            mEnableKeyguardWidgets.setChecked(lockPatternUtils.getWidgetsEnabled());
-            if (mMaximizeKeyguardWidgets != null) {
-                mMaximizeKeyguardWidgets.setEnabled(mEnableKeyguardWidgets.isChecked());
-                if (!mMaximizeKeyguardWidgets.isEnabled()) {
-                    mMaximizeKeyguardWidgets.setChecked(false);
-                    Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0);
-                }
-            }
         }
     }
 
@@ -653,19 +643,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
         } else if (preference == mLockRingBattery) {
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.BATTERY_AROUND_LOCKSCREEN_RING, isToggled(preference) ? 1 : 0);
-        } else if (KEY_ENABLE_WIDGETS.equals(key)) {
-            lockPatternUtils.setWidgetsEnabled(mEnableKeyguardWidgets.isChecked());
-            if (mMaximizeKeyguardWidgets != null) {
-            mMaximizeKeyguardWidgets.setEnabled(mEnableKeyguardWidgets.isChecked());
-                if (!mMaximizeKeyguardWidgets.isEnabled()) {
-                    mMaximizeKeyguardWidgets.setChecked(false);
-                    Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0);
-                }
-            }
-        } else if (preference == mMaximizeKeyguardWidgets) {
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, isToggled(preference) ? 1 : 0);
         } else if (preference == mShowPassword) {
             Settings.System.putInt(getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD,
                     mShowPassword.isChecked() ? 1 : 0);
