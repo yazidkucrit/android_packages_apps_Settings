@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
@@ -69,6 +70,10 @@ import android.widget.TabWidget;
 
 import com.android.settings.users.ProfileUpdateReceiver;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,6 +83,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Utils {
+
+    private static final String TAG = "Utils";
 
     /**
      * Set the preference's title to the matching activity's label.
@@ -113,7 +120,7 @@ public class Utils {
     private static final int DEVICE_TABLET = 2;
 
     // Device type reference
-    private static int mDeviceType = -1;
+    private static int sDeviceType = -1;
 
     /**
      * Finds a matching activity for a preference's intent. If a matching
@@ -194,8 +201,7 @@ public class Utils {
     public static boolean updatePreferenceToSpecificActivityFromMetaDataOrRemove(Context context,
             PreferenceGroup parentPreferenceGroup, String preferenceKey) {
 
-        IconPreferenceScreen preference = (IconPreferenceScreen)parentPreferenceGroup
-                .findPreference(preferenceKey);
+        Preference preference = parentPreferenceGroup.findPreference(preferenceKey);
         if (preference == null) {
             return false;
         }
@@ -221,7 +227,9 @@ public class Utils {
                         Bundle metaData = resolveInfo.activityInfo.metaData;
 
                         if (res != null && metaData != null) {
-                            icon = res.getDrawable(metaData.getInt(META_DATA_PREFERENCE_ICON));
+                            if (preference instanceof IconPreferenceScreen) {
+                                icon = res.getDrawable(metaData.getInt(META_DATA_PREFERENCE_ICON));
+                            }
                             title = res.getString(metaData.getInt(META_DATA_PREFERENCE_TITLE));
                             summary = res.getString(metaData.getInt(META_DATA_PREFERENCE_SUMMARY));
                         }
@@ -238,7 +246,6 @@ public class Utils {
                     }
 
                     // Set icon, title and summary for the preference
-                    preference.setIcon(icon);
                     preference.setTitle(title);
                     preference.setSummary(summary);
                     if (preference instanceof IconPreferenceScreen) {
@@ -505,6 +512,43 @@ public class Utils {
         }
     }
 
+    public static boolean fileExists(String filename) {
+        return new File(filename).exists();
+    }
+
+    public static String fileReadOneLine(String fname) {
+        BufferedReader br;
+        String line = null;
+
+        try {
+            br = new BufferedReader(new FileReader(fname), 512);
+            try {
+                line = br.readLine();
+            } finally {
+                br.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "IO Exception when reading /sys/ file", e);
+        }
+        return line;
+    }
+
+    public static boolean fileWriteOneLine(String fname, String value) {
+        try {
+            FileWriter fw = new FileWriter(fname);
+            try {
+                fw.write(value);
+            } finally {
+                fw.close();
+            }
+        } catch (IOException e) {
+            String Error = "Error writing to " + fname + ". Exception: ";
+            Log.e(TAG, Error, e);
+            return false;
+        }
+        return true;
+    }
+
     /* Used by UserSettings as well. Call this on a non-ui thread. */
     public static boolean copyMeProfilePhoto(Context context, UserInfo user) {
         Uri contactUri = Profile.CONTENT_URI;
@@ -622,70 +666,75 @@ public class Utils {
                 .getUsers().size() > 1;
     }
 
-    /* returns whether the device has volume rocker or not. */
-    public static boolean hasVolumeRocker(Context context) {
-        return context.getResources().getBoolean(R.bool.has_volume_rocker);
-    }
-
-    private static int getScreenType(Context con) {
-        if (mDeviceType == -1) {
-            WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
+    private static int getScreenType(Context context) {
+        if (sDeviceType == -1) {
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             DisplayInfo outDisplayInfo = new DisplayInfo();
             wm.getDefaultDisplay().getDisplayInfo(outDisplayInfo);
             int shortSize = Math.min(outDisplayInfo.logicalHeight, outDisplayInfo.logicalWidth);
-            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / outDisplayInfo.logicalDensityDpi;
+            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT
+                    / outDisplayInfo.logicalDensityDpi;
             if (shortSizeDp < 600) {
                 // 0-599dp: "phone" UI with a separate status & navigation bar
-                mDeviceType =  DEVICE_PHONE;
+                sDeviceType =  DEVICE_PHONE;
             } else if (shortSizeDp < 720) {
                 // 600-719dp: "phone" UI with modifications for larger screens
-                mDeviceType = DEVICE_HYBRID;
+                sDeviceType = DEVICE_HYBRID;
             } else {
                 // 720dp: "tablet" UI with a single combined status & navigation bar
-                mDeviceType = DEVICE_TABLET;
+                sDeviceType = DEVICE_TABLET;
             }
         }
-        return mDeviceType;
+        return sDeviceType;
     }
 
-    public static boolean isPhone(Context con) {
-        return getScreenType(con) == DEVICE_PHONE;
+    public static boolean isPhone(Context context) {
+        return getScreenType(context) == DEVICE_PHONE;
     }
 
-    public static boolean isHybrid(Context con) {
-        return getScreenType(con) == DEVICE_HYBRID;
+    public static boolean isHybrid(Context context) {
+        return getScreenType(context) == DEVICE_HYBRID;
     }
 
-    public static boolean isTablet(Context con) {
-        return getScreenType(con) == DEVICE_TABLET;
+    public static boolean isTablet(Context context) {
+        return getScreenType(context) == DEVICE_TABLET;
     }
 
     /**
      * Locks the activity orientation to the current device orientation
-     * @param act
+     * @param activity
      */
-    public static void lockCurrentOrientation(Activity act) {
-        int currentRotation = act.getWindowManager().getDefaultDisplay().getRotation();
+    public static void lockCurrentOrientation(Activity activity) {
+        int currentRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int orientation = activity.getResources().getConfiguration().orientation;
         int frozenRotation = 0;
-        boolean isTablet = isTablet(act);
-        switch(currentRotation) {
-                case Surface.ROTATION_0:
-                        frozenRotation = isTablet ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
-                            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-                case Surface.ROTATION_90:
-                        frozenRotation = isTablet ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT :
-                            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_180:
-                        frozenRotation = isTablet ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE :
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                    break;
-                case Surface.ROTATION_270:
-                        frozenRotation = isTablet ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT :
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                    break;
-            }
-        act.setRequestedOrientation(frozenRotation);
+        switch (currentRotation) {
+            case Surface.ROTATION_0:
+                frozenRotation = orientation == Configuration.ORIENTATION_LANDSCAPE
+                    ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                break;
+            case Surface.ROTATION_90:
+                frozenRotation = orientation == Configuration.ORIENTATION_PORTRAIT
+                    ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                break;
+            case Surface.ROTATION_180:
+                frozenRotation = orientation == Configuration.ORIENTATION_LANDSCAPE
+                    ? ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    : ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                break;
+            case Surface.ROTATION_270:
+                frozenRotation = orientation == Configuration.ORIENTATION_PORTRAIT
+                    ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    : ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                break;
+        }
+        activity.setRequestedOrientation(frozenRotation);
+    }
+
+    /* returns whether the device has volume rocker or not. */
+    public static boolean hasVolumeRocker(Context context) {
+        return context.getResources().getBoolean(R.bool.has_volume_rocker);
     }
 }
