@@ -30,7 +30,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -77,15 +76,9 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private static final String LOCK_NUMPAD_RANDOM = "lock_numpad_random";
     private static final String LOCK_BEFORE_UNLOCK = "lock_before_unlock";
 
-    private static final String MENU_UNLOCK_PREF = "menu_unlock";
-
     private static final int SET_OR_CHANGE_LOCK_METHOD_REQUEST = 123;
     private static final int CONFIRM_EXISTING_FOR_BIOMETRIC_WEAK_IMPROVE_REQUEST = 124;
     private static final int CONFIRM_EXISTING_FOR_BIOMETRIC_WEAK_LIVELINESS_OFF = 125;
-
-    // Masks for checking presence of hardware keys.
-    // Must match values in frameworks/base/core/res/res/values/config.xml
-    private static final int KEY_MASK_MENU = 0x04;
 
     // Misc Settings
     private static final String KEY_SIM_LOCK = "sim_lock";
@@ -120,22 +113,16 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private DialogInterface mWarnInstallApps;
     private CheckBoxPreference mToggleVerifyApps;
     private CheckBoxPreference mPowerButtonInstantlyLocks;
-
     private CheckBoxPreference mSeeThrough;
 
     private SeekBarPreference mBlurRadius;
 
     private ListPreference mLockNumpadRandom;
-    private CheckBoxPreference mLockBeforeUnlock;
 
-    private CheckBoxPreference mMenuUnlock;
+    private CheckBoxPreference mLockBeforeUnlock;
     private CheckBoxPreference mBatteryStatus;
 
     private Preference mNotificationAccess;
-
-    // needed for menu unlock
-    private Resources keyguardResource;
-    private boolean mMenuUnlockDefault;
 
     private boolean mIsPrimary;
 
@@ -151,16 +138,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
 
         mPM = getActivity().getPackageManager();
         mDPM = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-        Resources keyguardResources = null;
-        try {
-            keyguardResources = mPM.getResourcesForApplication("com.android.keyguard");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mMenuUnlockDefault = keyguardResources != null
-            ? keyguardResources.getBoolean(keyguardResources.getIdentifier(
-            "com.android.keyguard:bool/config_disableMenuKeyInLockScreen", null, null)) : false;
 
         mChooseLockSettingsHelper = new ChooseLockSettingsHelper(getActivity());
     }
@@ -339,24 +316,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
 
         PreferenceGroup securityCategory = (PreferenceGroup)
                 root.findPreference(KEY_SECURITY_CATEGORY);
-
-        // Menu Unlock
-        mMenuUnlock = (CheckBoxPreference) root.findPreference(MENU_UNLOCK_PREF);
-        if (mMenuUnlock != null) {
-            int deviceKeys = getResources().getInteger(
-                    com.android.internal.R.integer.config_deviceHardwareKeys);
-            boolean hasMenuKey = (deviceKeys & KEY_MASK_MENU) != 0;
-            if (hasMenuKey) {
-                boolean settingsEnabled = Settings.System.getIntForUser(
-                        getContentResolver(),
-                        Settings.System.MENU_UNLOCK_SCREEN, mMenuUnlockDefault ? 0 : 1,
-                        UserHandle.USER_CURRENT) == 1;
-                mMenuUnlock.setChecked(settingsEnabled);
-                mMenuUnlock.setOnPreferenceChangeListener(this);
-            } else {
-                securityCategory.removePreference(mMenuUnlock);
-            }
-        }
 
         // Show password
         mShowPassword = (CheckBoxPreference) root.findPreference(KEY_SHOW_PASSWORD);
@@ -728,10 +687,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
             Settings.Secure.putInt(getContentResolver(),
                     Settings.Secure.LOCK_BEFORE_UNLOCK,
                     ((Boolean) value) ? 1 : 0);
-        } else if (preference == mMenuUnlock) {
-            Settings.System.putIntForUser(getContentResolver(),
-                    Settings.System.MENU_UNLOCK_SCREEN,
-                    ((Boolean) value) ? 1 : 0, UserHandle.USER_CURRENT);
         }
         return true;
     }

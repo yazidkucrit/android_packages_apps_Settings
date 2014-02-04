@@ -691,10 +691,6 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="smart_pulldown_dismissable">Dismissable</string>
     <string name="smart_pulldown_persistent">Persistent</string>
 
-    <!-- security settings menu unlock -->
-    <string name="unlock_menu_unlock_title">Menu unlock</string>
-    <string name="unlock_menu_unlock_summary">Pressing the menu button unlocks the device</string>
-
     <!-- Telo Radio -->
     <string name="telo_radio_settings_title">Connection manager</string>
     <string name="telo_radio_enable_title">Enable manager</string>
