@@ -99,7 +99,7 @@
     <!-- Navigation bar settings -->
     <string name="navigation_bar">Navigation Bar</string>
     <string name="navigation_ring_title">Shortcuts</string>
-    <string name="navigation_bar_summary">Enable or Disable the Navigation Bar.</string>
+    <string name="navigation_bar_summary">Enable or Disable the Navigation Bar. Please reboot to apply the changes</string>
     <string name="navigation_bar_height">Navigation bar height:</string>
 
     <!-- Navigation ring shortcuts -->
