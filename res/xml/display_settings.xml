@@ -28,9 +28,10 @@
                 android:title="@string/wallpaper_settings_title"
                 android:fragment="com.android.settings.WallpaperTypeSettings" />
 
-        <CheckBoxPreference
-            android:key="accelerometer"
-            android:title="@string/accelerometer_title"/>
+        <PreferenceScreen
+                android:key="display_rotation"
+                android:fragment="com.android.settings.slim.DisplayRotation"
+                android:title="@string/display_rotation_title" />
 
         <ListPreference
                 android:key="screen_timeout"
@@ -55,7 +56,7 @@
 
         <PreferenceScreen
                 android:fragment="com.android.settings.notificationlight.NotificationLightSettings"
-                android:key="notification_led"
+                android:key="notification_pulse"
                 android:title="@string/notification_led_category_title" />
 
         <CheckBoxPreference
@@ -85,7 +86,7 @@
             android:title="@string/system_power_crt_mode_title"
             android:entries="@array/entries_system_power_crt_mode"
             android:entryValues="@array/values_system_power_crt_mode" />
- 
+
     </PreferenceCategory>
 
 </PreferenceScreen>

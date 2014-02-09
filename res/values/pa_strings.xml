@@ -61,21 +61,21 @@
     <string name="dialog_delete_message">Remove selected item?</string>
     <string name="dialog_test_message">Turn the screen off to see the selected notification in action or dismiss this dialog to stop the test</string>
     <string name="dialog_test_button">Dismiss</string>
-    <string name="profile_choose_app">Choose app</string>
-    <string name="profiles_add">Add</string>
 
-    <!--Lights settings screen, notification light settings-->
-    <string name="display_lights_settings_title">Display &amp; lights</string>
-    <string name="lights_category_title">Lights</string>
+    <!--Display settings screen, notification light settings-->
+    <string name="notification_light_ok">OK</string>
+    <string name="notification_light_reset">Reset</string>
     <string name="notification_light_general_title">General</string>
     <string name="notification_light_applist_title">Applications</string>
     <string name="notification_light_phonelist_title">Phone</string>
     <string name="notification_light_use_custom">Use custom values</string>
+    <string name="notification_light_default_value">Default</string>
     <string name="notification_light_enabled">Enabled</string>
     <string name="notification_light_disabled">Disabled</string>
-    <string name="notification_light_default_value">Default</string>
     <string name="notification_light_missed_call_title">Missed call</string>
     <string name="notification_light_voicemail_title">Voicemail</string>
+    <string name="notification_light_choose_app">Choose application</string>
+    <string name="notification_light_add">Add</string>
 
     <!--Values for the notification light pulse spinners-->
     <string name="pulse_length_always_on">Always on</string>
@@ -747,4 +747,14 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="captive_toggle_summary">Toggle captive portal detection</string>
     <string name="captive_server">Server for captive portal detection</string>
     <string name="captive_server_summary">Server used to detect captive portal. Leave empty for default.</string>
+
+    <!-- Display : Rotation -->
+    <string name="display_rotation_title">Rotation</string>
+    <string name="display_rotation_disabled">Disabled</string>
+    <string name="display_rotation_unit">degrees</string>
+    <string name="display_rotation_category_title">Rotation modes</string>
+    <string name="display_rotation_0_title">0 degrees</string>
+    <string name="display_rotation_90_title">90 degrees</string>
+    <string name="display_rotation_180_title">180 degrees</string>
+    <string name="display_rotation_270_title">270 degrees</string>
 </resources>
