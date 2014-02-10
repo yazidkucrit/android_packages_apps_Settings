@@ -337,7 +337,7 @@ public class AdditionalSettings extends SettingsPreferenceFragment implements
             intent.putExtra("crop", "true");
             intent.putExtra("scale", true);
             intent.putExtra("scaleUpIfNeeded", false);
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
 
             final Display display = getActivity().getWindowManager().getDefaultDisplay();
 
