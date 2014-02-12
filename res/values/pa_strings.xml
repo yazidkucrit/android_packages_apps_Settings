@@ -50,10 +50,6 @@
 
     <!--Notification LED category header-->
     <string name="notification_led_category_title">Notification LED</string>
-    <string name="default_string">Default</string>
-    <string name="enabled">Enabled</string>
-    <string name="ok">OK</string>
-    <string name="reset">Reset</string>
     <string name="profile_choose_app">Choose app</string>
     <string name="profiles_add">Add</string>
 

@@ -67,10 +67,6 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REBOOT" />
     <uses-permission android:name="android.permission.MANAGE_DEVICE_ADMINS" />
-<<<<<<< HEAD
-=======
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
->>>>>>> PA/kitkat
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
@@ -1625,7 +1621,6 @@
             android:theme="@style/CryptKeeperBlankTheme"
         />
 
-<<<<<<< HEAD
         <activity android:name=".slim.AutoBrightnessSetup"
                 android:excludeFromRecents="true"
                 android:theme="@*android:style/Theme.Holo.Dialog.Alert" />
@@ -1678,7 +1673,6 @@
             <meta-data android:name="com.android.settings.PARENT_FRAGMENT_CLASS"
                 android:value="com.android.settings.Settings$SoundSettingsActivity" />
         </activity>
-=======
         <!-- CyanogenMod activities Start -->
 
         <activity android:name=".cyanogenmod.AutoBrightnessSetup"
@@ -1686,7 +1680,6 @@
                 android:theme="@*android:style/Theme.Holo.Dialog.Alert" />
 
         <!-- CyanogenMod activities End -->
->>>>>>> PA/kitkat
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to quite hours settings -->
         <activity android:name="Settings$QuietHoursSettingsActivity"
