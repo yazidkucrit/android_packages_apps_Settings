@@ -46,12 +46,10 @@
                 android:title="@string/screensaver_settings_title"
                 android:fragment="com.android.settings.DreamSettings" />
 
-        <com.android.settings.WarnedListPreference
+        <com.android.settings.FontDialogPreference
                 android:key="font_size"
                 android:title="@string/title_font_size"
                 android:summary="@string/summary_font_size"
-                android:entries="@array/entries_font_size"
-                android:entryValues="@array/entryvalues_font_size"
                 android:dialogTitle="@string/dialog_title_font_size" />
 
         <PreferenceScreen
@@ -88,5 +86,11 @@
             android:entryValues="@array/values_system_power_crt_mode" />
 
     </PreferenceCategory>
+
+        <CheckBoxPreference
+            android:key="double_tap_wake_gesture"
+            android:title="@string/double_tap_to_wake_title"
+            android:summary="@string/double_tap_to_wake_summary"
+            android:defaultValue="false" />
 
 </PreferenceScreen>

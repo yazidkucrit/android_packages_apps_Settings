@@ -58,11 +58,8 @@
     <string name="pulse_speed_title">Pulse length and speed</string>
     <string name="default_time">Normal</string>
     <string name="custom_time">Custom</string>
-    <string name="dialog_test">Test</string>
     <string name="dialog_delete_title">Delete</string>
     <string name="dialog_delete_message">Remove selected item?</string>
-    <string name="dialog_test_message">Turn the screen off to see the selected notification in action or dismiss this dialog to stop the test</string>
-    <string name="dialog_test_button">Dismiss</string>
 
     <!--Display settings screen, notification light settings-->
     <string name="notification_light_ok">OK</string>
@@ -371,6 +368,10 @@ USB networks). This setting is reset on reboot</string>
     <string name="navigation_bar_reset_toast">Navigation bar reset to default</string>
     <string name="navigation_bar_menu_editable">Editable</string>
     <string name="navigation_bar_menu_locked">Locked</string>
+
+    <!-- Font size sample text. This needs to be a very short string, as it is shown in
+    multiple font sizes in a limited amount of space. -->
+    <string name="font_size_sample">Sample</string>
 
     <!-- time range preference -->
     <string name="start_time_title">Start</string>
@@ -795,4 +796,8 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="display_rotation_90_title">90 degrees</string>
     <string name="display_rotation_180_title">180 degrees</string>
     <string name="display_rotation_270_title">270 degrees</string>
+
+    <!-- tap-to-wake -->
+    <string name="double_tap_to_wake_title">Double-tap to wake</string>
+    <string name="double_tap_to_wake_summary">Disable or Enable double-tap to wake device</string>
 </resources>
