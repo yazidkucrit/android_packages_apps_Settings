@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -33,8 +34,9 @@ import android.os.UserHandle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -64,7 +66,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_ANIMATION_OPTIONS = "category_animation_options";
     private static final String KEY_POWER_CRT_MODE = "system_power_crt_mode";
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
-
+    private static final String KEY_TAP_TO_WAKE = "double_tap_wake_gesture";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -75,7 +77,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private PreferenceScreen mDisplayRotationPreference;
     private CheckBoxPreference mWakeWhenPluggedOrUnplugged;
-    private WarnedListPreference mFontSizePref;
+    private FontDialogPreference mFontSizePref;
     private PreferenceScreen mNotificationPulse;
 
     private final Configuration mCurConfig = new Configuration();
@@ -107,8 +109,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         if (!RotationPolicy.isRotationSupported(getActivity())) {
             getPreferenceScreen().removePreference(mDisplayRotationPreference);
         }
-
-        Resources res = getResources();
 
         mScreenSaverPreference = findPreference(KEY_SCREEN_SAVER);
         if (mScreenSaverPreference != null

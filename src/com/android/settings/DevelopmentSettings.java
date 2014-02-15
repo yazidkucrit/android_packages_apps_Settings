@@ -97,6 +97,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
 
     private static final String ENABLE_ADB = "enable_adb";
     private static final String ADB_NOTIFY = "adb_notify";
+    private static final String ADB_PARANOID = "adb_paranoid";
     private static final String CLEAR_ADB_KEYS = "clear_adb_keys";
     private static final String ENABLE_TERMINAL = "enable_terminal";
 
@@ -161,7 +162,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String TERMINAL_APP_PACKAGE = "com.android.terminal";
 
     private static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
- 
+
     private static final int RESULT_DEBUG_APP = 1000;
 
     // Dialog identifiers used in showDialog
@@ -178,6 +179,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
 
     private CheckBoxPreference mEnableAdb;
     private CheckBoxPreference mAdbNotify;
+    private CheckBoxPreference mAdbParanoid;
     private Preference mClearAdbKeys;
     private CheckBoxPreference mEnableTerminal;
     private Preference mBugreport;
@@ -224,7 +226,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private CheckBoxPreference mKillAppLongpressBack;
 
     private ListPreference mMSOB;
- 
+
     private final ArrayList<Preference> mAllPrefs = new ArrayList<Preference>();
     private final ArrayList<CheckBoxPreference> mResetCbPrefs
             = new ArrayList<CheckBoxPreference>();
@@ -264,6 +266,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                 findPreference(DEBUG_DEBUGGING_CATEGORY_KEY);
 
         mEnableAdb = findAndInitCheckboxPref(ENABLE_ADB);
+        mAdbParanoid = findAndInitCheckboxPref(ADB_PARANOID);
         mAdbNotify = findAndInitCheckboxPref(ADB_NOTIFY);
         mClearAdbKeys = findPreference(CLEAR_ADB_KEYS);
         if (!SystemProperties.getBoolean("ro.adb.secure", false)) {
@@ -295,6 +298,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
 
         if (!android.os.Process.myUserHandle().equals(UserHandle.OWNER)) {
             disableForUser(mEnableAdb);
+            disableForUser(mAdbParanoid);
             disableForUser(mClearAdbKeys);
             disableForUser(mEnableTerminal);
             disableForUser(mPassword);
@@ -499,7 +503,9 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
         updateCheckBox(mEnableAdb, Settings.Global.getInt(cr,
                 Settings.Global.ADB_ENABLED, 0) != 0);
         mAdbNotify.setChecked(Settings.Secure.getInt(cr,
-            Settings.Secure.ADB_NOTIFY, 1) != 0);
+                Settings.Secure.ADB_NOTIFY, 1) != 0);
+        mAdbParanoid.setChecked(Settings.Secure.getInt(cr,
+                Settings.Secure.ADB_PARANOID, 0) != 0);
         if (mEnableTerminal != null) {
             updateCheckBox(mEnableTerminal,
                     context.getPackageManager().getApplicationEnabledSetting(TERMINAL_APP_PACKAGE)
@@ -1275,6 +1281,10 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                 mVerifyAppsOverUsb.setChecked(false);
                 updateBugreportOptions();
             }
+        } else if (preference == mAdbParanoid) {
+            Settings.Secure.putInt(getActivity().getContentResolver(),
+                    Settings.Secure.ADB_PARANOID,
+                    mAdbParanoid.isChecked() ? 1 : 0);
         } else if (preference == mAdbOverNetwork) {
             if (mAdbOverNetwork.isChecked()) {
                 showDialogInner(DLG_ADBTCP);
