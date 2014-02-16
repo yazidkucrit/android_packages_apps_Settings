@@ -12,7 +12,7 @@ import android.widget.SeekBar;
  * integer conversions.
  */
 public class IntervalSeekBar extends SeekBar {
-    private float mMin;
+    private float mMinimum;
     private float mMax;
     private float mDefault;
     private float mMultiplier;
@@ -24,16 +24,16 @@ public class IntervalSeekBar extends SeekBar {
                 R.styleable.IntervalSeekBar, 0, 0);
 
         mMax = seekBarType.getFloat(R.styleable.IntervalSeekBar_max, 1.5f);
-        mMin = seekBarType.getFloat(R.styleable.IntervalSeekBar_min, 0.5f);
+        mMinimum = seekBarType.getFloat(R.styleable.IntervalSeekBar_minimum, 0.5f);
         mDefault = seekBarType.getFloat(R.styleable.IntervalSeekBar_defaultValue, 1.0f);
 
         int digits = seekBarType.getInt(R.styleable.IntervalSeekBar_digits, 0);
         mMultiplier = (float) Math.pow(10, digits);
 
-        if (mMin > mMax) {
+        if (mMinimum > mMax) {
             float temp = mMax;
-            mMax = mMin;
-            mMin = temp;
+            mMax = mMinimum;
+            mMinimum = temp;
         }
 
         setMax(convertFloatToProgress(mMax));
@@ -48,7 +48,7 @@ public class IntervalSeekBar extends SeekBar {
      *  This operation is the inverse of setFontScaling.
      */
     public float getProgressFloat() {
-        return (getProgress() / mMultiplier) + mMin;
+        return (getProgress() / mMultiplier) + mMinimum;
     }
 
     /*
@@ -61,11 +61,11 @@ public class IntervalSeekBar extends SeekBar {
     }
 
     private int convertFloatToProgress(float value) {
-        return Math.round((value - mMin) * mMultiplier);
+        return Math.round((value - mMinimum) * mMultiplier);
     }
 
     public float getMinimum() {
-        return mMin;
+        return mMinimum;
     }
 
     public float getMaximum() {
@@ -81,7 +81,7 @@ public class IntervalSeekBar extends SeekBar {
         setMax(convertFloatToProgress(mMax));
     }
 
-    public void setMinimum(float min) {
-        mMin = min;
+    public void setMinimum(float minimum) {
+        mMinimum = minimum;
     }
 }
