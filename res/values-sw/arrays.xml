@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /*
 **
 ** Copyright 2007 The Android Open Source Project
@@ -407,9 +407,9 @@
   </string-array>
   <string-array name="animator_duration_scale_entries">
     <item msgid="6039901060648228241">"Uhuishaji umezimwa"</item>
-    <item>"Skeli .25x ya haiwani"</item>
+    <item>"Mizani .25x ya uhuishaji"</item>
     <item msgid="1138649021950863198">"Mizani .5x ya uhuishaji"</item>
-    <item>"Skeli .75x ya haiwani"</item>
+    <item>"Mizani .75x ya uhuishaji"</item>
     <item msgid="4394388961370833040">"Mizani 1x ya uhuishaji"</item>
     <item msgid="8125427921655194973">"Mizani 1.5x ya uhuishaji"</item>
     <item msgid="3334024790739189573">"Mizani 2x ya uhuishaji"</item>

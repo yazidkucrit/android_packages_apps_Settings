@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /*
 **
 ** Copyright 2007 The Android Open Source Project
@@ -402,9 +402,9 @@
   </string-array>
   <string-array name="animator_duration_scale_entries">
     <item msgid="6039901060648228241">"Animatsioon väljas"</item>
-    <item>"Animatsiooni skaala 0,25 korda"</item>
+    <item>"0,25-kordne animatsiooni skaala"</item>
     <item msgid="1138649021950863198">"0,5-kordne animatsiooni skaala"</item>
-    <item>"Animatsiooni skaala 0,75 korda"</item>
+    <item>"0,75-kordne animatsiooni skaala"</item>
     <item msgid="4394388961370833040">"1-kordne animatsiooni skaala"</item>
     <item msgid="8125427921655194973">"1,5-kordne animatsiooni skaala"</item>
     <item msgid="3334024790739189573">"2-kordne animatsiooni skaala"</item>

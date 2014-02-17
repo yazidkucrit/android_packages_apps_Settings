@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /*
 **
 ** Copyright 2007 The Android Open Source Project
@@ -407,9 +407,9 @@
   </string-array>
   <string-array name="animator_duration_scale_entries">
     <item msgid="6039901060648228241">"ปิดภาพเคลื่อนไหว"</item>
-    <item>"ภาพเคลื่อนไหวขนาด .25 เท่า"</item>
+    <item>"ความเร็วภาพเคลื่อนไหว .25 เท่า"</item>
     <item msgid="1138649021950863198">"ความเร็วภาพเคลื่อนไหว .5 เท่า"</item>
-    <item>"ภาพเคลื่อนไหวขนาด .75 เท่า"</item>
+    <item>"ความเร็วภาพเคลื่อนไหว .75 เท่า"</item>
     <item msgid="4394388961370833040">"ความเร็วภาพเคลื่อนไหว 1 เท่า"</item>
     <item msgid="8125427921655194973">"ความเร็วภาพเคลื่อนไหว 1.5 เท่า"</item>
     <item msgid="3334024790739189573">"ความเร็วภาพเคลื่อนไหว 2 เท่า"</item>
