@@ -1851,6 +1851,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name="com.android.settings.AOSPAL.RemixSettings"/>
+
         <!-- Telo - FIN -->
 
         <activity android:name=".ApnEditor" />
