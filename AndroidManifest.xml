@@ -1853,6 +1853,10 @@
 
         <activity android:name="com.android.settings.AOSPAL.RemixSettings"/>
 
+        <activity android:name=".cyanogenmod.LockscreenTargets" />
+
+        <activity android:name=".cyanogenmod.LockscreenInterface" />
+
         <!-- Telo - FIN -->
 
         <activity android:name=".ApnEditor" />
