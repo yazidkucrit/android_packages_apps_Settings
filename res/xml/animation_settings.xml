@@ -4,28 +4,28 @@
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
     android:key="animation_settings">
 
-        <PreferenceScreen
-            android:id="@+id/animations"
-            android:title="@string/title_animation_controls"
-            android:summary="@string/header_summary_animation"
-            android:fragment="com.android.settings.AOSPAL.fragments.AnimationControls" />
+    <PreferenceScreen
+        android:key="interface_animation_system"
+        android:fragment="com.android.settings.AOSPAL.aokp.SystemAnimationInterfaceSettings"
+        android:title="@string/system_animation_title"
+        android:summary="@string/system_animation_summary" />
 
-        <ListPreference
-            android:key="listview_animation"
-            android:dialogTitle="@string/listview_animation_title"
-            android:title="@string/listview_animation_title"
-            android:entries="@array/listview_animation_entries"
-            android:entryValues="@array/listview_animation_values"
-            android:defaultValue="0" />
+    <PreferenceScreen
+        android:key="interface_animation_listview"
+        android:fragment="com.android.settings.AOSPAL.aokp.ListViewAnimationInterfaceSettings"
+        android:title="@string/listview_title"
+        android:summary="@string/listview_summary" />
 
-        <ListPreference
-            android:key="listview_interpolator"
-            android:dialogTitle="@string/listview_interpolator_title"
-            android:title="@string/listview_interpolator_title"
-            android:entries="@array/listview_interpolator_entries"
-            android:entryValues="@array/listview_interpolator_values"
-            android:defaultValue="0"
-            android:dependency="listview_animation" />
+    <PreferenceScreen
+        android:key="interface_animation_scroll"
+        android:fragment="com.android.settings.AOSPAL.aokp.ScrollAnimationInterfaceSettings"
+        android:title="@string/scrolling_title"
+        android:summary="@string/scrolling_summary" />
 
+    <PreferenceScreen
+        android:key="interface_animation_keyboard"
+        android:fragment="com.android.settings.AOSPAL.aokp.KeyboardAnimationInterfaceSettings"
+        android:title="@string/ime_animation_title"
+        android:summary="@string/ime_animation_summary" />
 
 </PreferenceScreen>
