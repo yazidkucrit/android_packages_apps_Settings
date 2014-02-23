@@ -27,6 +27,7 @@ import android.provider.Settings.SettingNotFoundException;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -57,6 +58,7 @@ public class LockscreenSettings extends SettingsPreferenceFragment implements
     private static final String KEY_LOCKSCREEN_WALLPAPER = "lockscreen_wallpaper";
     private static final String KEY_SELECT_LOCKSCREEN_WALLPAPER = "select_lockscreen_wallpaper";
     private static final String BATTERY_AROUND_LOCKSCREEN_RING = "battery_around_lockscreen_ring";
+    private static final String KEY_UNLOCK_CATEGORY = "unlock_category";
 
     private static final String KEY_SEE_THROUGH = "see_through";
     private static final String KEY_BLUR_RADIUS = "blur_radius";
@@ -100,6 +102,30 @@ public class LockscreenSettings extends SettingsPreferenceFragment implements
         }
 
         PreferenceScreen prefs = getPreferenceScreen();
+
+        final int deviceKeys = getResources().getInteger(
+                    com.android.internal.R.integer.config_deviceHardwareKeys);
+        final int KEY_MASK_HOME = 0x01;
+        final int KEY_MASK_MENU = 0x04;
+        CheckBoxPreference menuUnlock = (CheckBoxPreference)
+                    findPreference(Settings.System.MENU_UNLOCK_SCREEN);
+        CheckBoxPreference homeUnlock = (CheckBoxPreference)
+                    findPreference(Settings.System.HOME_UNLOCK_SCREEN);
+        PreferenceGroup unlockCategory = (PreferenceGroup)
+                    prefs.findPreference(KEY_UNLOCK_CATEGORY);
+
+        if ((deviceKeys & KEY_MASK_MENU) == 0 && (deviceKeys & KEY_MASK_HOME) == 0) {
+            prefs.removePreference(unlockCategory);
+        } else {
+            // Hide the MenuUnlock setting if no menu button is available
+            if ((deviceKeys & KEY_MASK_MENU) == 0) {
+                unlockCategory.removePreference(menuUnlock);
+            }
+            // Hide the HomeUnlock setting if no home button is available
+            if ((deviceKeys & KEY_MASK_HOME) == 0) {
+                unlockCategory.removePreference(homeUnlock);
+            }
+        }
 
         mLockScreenPowerMenu = (CheckBoxPreference) prefs.findPreference(LOCKSCREEN_POWER_MENU);
         if (mLockScreenPowerMenu != null) {

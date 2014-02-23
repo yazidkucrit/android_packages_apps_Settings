@@ -88,7 +88,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
     private static final String KEY_CREDENTIALS_MANAGER = "credentials_management";
     private static final String KEY_NOTIFICATION_ACCESS = "manage_notification_access";
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
-    private static final String KEY_UNLOCK_CATEGORY = "unlock_category";
 
     private PackageManager mPM;
     private DevicePolicyManager mDPM;
@@ -257,30 +256,6 @@ public class SecuritySettings extends RestrictedSettingsFragment
 
         // Append the rest of the settings
         addPreferencesFromResource(R.xml.security_settings_misc);
-
-        final int deviceKeys = getResources().getInteger(
-                    com.android.internal.R.integer.config_deviceHardwareKeys);
-        final int KEY_MASK_HOME = 0x01;
-        final int KEY_MASK_MENU = 0x04;
-        CheckBoxPreference menuUnlock = (CheckBoxPreference)
-                    findPreference(Settings.System.MENU_UNLOCK_SCREEN);
-        CheckBoxPreference homeUnlock = (CheckBoxPreference)
-                    findPreference(Settings.System.HOME_UNLOCK_SCREEN);
-        PreferenceGroup unlockCategory = (PreferenceGroup)
-                    root.findPreference(KEY_UNLOCK_CATEGORY);
-
-        if ((deviceKeys & KEY_MASK_MENU) == 0 && (deviceKeys & KEY_MASK_HOME) == 0) {
-            root.removePreference(unlockCategory);
-        } else {
-            // Hide the MenuUnlock setting if no menu button is available
-            if ((deviceKeys & KEY_MASK_MENU) == 0) {
-                unlockCategory.removePreference(menuUnlock);
-            }
-            // Hide the HomeUnlock setting if no home button is available
-            if ((deviceKeys & KEY_MASK_HOME) == 0) {
-                unlockCategory.removePreference(homeUnlock);
-            }
-        }
 
         // Do not display SIM lock for devices without an Icc card
         TelephonyManager tm = TelephonyManager.getDefault();
