@@ -3,10 +3,12 @@ package com.android.settings.AOSPAL;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -45,6 +47,8 @@ import com.android.internal.util.paranoid.DeviceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.CharSequence;
+import java.lang.String;
 
 public class NavBarSettings extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
@@ -93,7 +97,8 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         final String key = preference.getKey();
-        Context context = getApplicationContext();
+        CharSequence text = "Please reboot to apply the change";
+        Toast navBar = Toast.makeText(NavBarSettings.this, text, Toast.LENGTH_LONG);
 
         if (preference == mNavigationBarHeight) {
             Settings.System.putFloat(getActivity().getContentResolver(),
@@ -104,7 +109,7 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
                     Settings.System.NAVIGATION_BAR_SHOW,
                     ((Boolean) newValue) ? 1 : 0);
             mNavigationBarHeight.setEnabled((Boolean)newValue);
-            Toast.makeText(context, "Please reboot to apply the change", Toast.LENGTH_LONG).show();
+            navBar.show();
         } else {
             return false;
         }
