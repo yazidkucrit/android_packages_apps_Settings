@@ -97,8 +97,6 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         final String key = preference.getKey();
-        CharSequence text = "Please reboot to apply the change";
-        Toast navBar = Toast.makeText(NavBarSettings.this, text, Toast.LENGTH_LONG);
 
         if (preference == mNavigationBarHeight) {
             Settings.System.putFloat(getActivity().getContentResolver(),
@@ -109,7 +107,6 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
                     Settings.System.NAVIGATION_BAR_SHOW,
                     ((Boolean) newValue) ? 1 : 0);
             mNavigationBarHeight.setEnabled((Boolean)newValue);
-            navBar.show();
         } else {
             return false;
         }
