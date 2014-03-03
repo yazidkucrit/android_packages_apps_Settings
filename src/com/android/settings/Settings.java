@@ -97,6 +97,8 @@ import com.android.settings.wifi.WifiSettings;
 import com.android.settings.wifi.p2p.WifiP2pSettings;
 import com.android.settings.paranoid.QuietHours;
 
+import com.brewcrewfoo.performance.activities.MainActivity;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -359,7 +361,8 @@ public class Settings extends PreferenceActivity
         RemixSettings.class.getName(),
         AppOpsSummary.class.getName(),
         QuietHours.class.getName(),
-        TeloRadioSettings.class.getName()
+        TeloRadioSettings.class.getName(),
+        com.brewcrewfoo.performance.activities.MainActivity.class.getName()
     };
 
     @Override
@@ -1157,4 +1160,5 @@ public class Settings extends PreferenceActivity
     public static class ApnSettingsActivity extends Settings { /* empty */ }
     public static class ApnEditorActivity extends Settings { /* empty */ }
     public static class ASSRamBarActivity extends Settings { /* empty */ }
+    public static class MainActivity extends Settings { /* empty */ }
 }
