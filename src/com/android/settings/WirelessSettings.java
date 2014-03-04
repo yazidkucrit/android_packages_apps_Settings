@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +48,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.telephony.MSimTelephonyManager;
 
 import com.android.internal.telephony.SmsApplication;
 import com.android.internal.telephony.SmsApplication.SmsApplicationData;
@@ -277,6 +280,23 @@ public class WirelessSettings extends RestrictedSettingsFragment
         mAirplaneModePreference = (CheckBoxPreference) findPreference(KEY_TOGGLE_AIRPLANE);
         mCaptivePreference = (CheckBoxPreference) findPreference(KEY_TOGGLE_CAPTIVE);
         mCaptiveServerPreference = (EditTextPreference) findPreference(KEY_SERVER_CAPTIVE);
+
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            // Mobile Networks menu will traverse to Select Subscription menu.
+            PreferenceScreen manageSub =
+                    (PreferenceScreen) findPreference(KEY_MOBILE_NETWORK_SETTINGS);
+
+            if (manageSub != null) {
+                Intent intent = manageSub.getIntent();
+                intent.setClassName("com.android.phone",
+                                    "com.android.phone.SelectSubscription");
+                intent.putExtra(SelectSubscription.PACKAGE,
+                                    "com.android.phone");
+                intent.putExtra(SelectSubscription.TARGET_CLASS,
+                                "com.android.phone.MSimMobileNetworkSubSettings");
+            }
+        }
+
         CheckBoxPreference nfc = (CheckBoxPreference) findPreference(KEY_TOGGLE_NFC);
         ListPreference polling = (ListPreference) findPreference(KEY_NFC_POLLING);
         PreferenceScreen androidBeam = (PreferenceScreen) findPreference(KEY_ANDROID_BEAM_SETTINGS);
