@@ -1,8 +1,10 @@
 package com.android.settings.AOSPAL;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     private static final String KEY_REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
     private static final String RECENT_MENU_CLEAR_ALL = "recent_menu_clear_all";
     private static final String RECENT_MENU_CLEAR_ALL_LOCATION = "recent_menu_clear_all_location";
+    private static final String TELO_RADIO_SETTINGS = "telo_radio_settings";
 
     private ListPreference mRecentClearAllPosition;
     private CheckBoxPreference mRecentClearAll;
@@ -46,6 +49,12 @@ public class SystemSettings extends SettingsPreferenceFragment implements
 
         final ContentResolver resolver = getActivity().getContentResolver();
         PreferenceScreen prefs = getPreferenceScreen();
+
+        PreferenceScreen systemSettings = (PreferenceScreen) findPreference(SYSTEM_SETTINGS);
+
+        if (!DeviceUtils.isPhone(getActivity())) {
+            systemSettings.removePreference(findPreference(TELO_RADIO_SETTINGS));
+        }
 
         mDualPanel = (CheckBoxPreference) findPreference(KEY_DUAL_PANEL);
         mDualPanel.setChecked(Settings.System.getBoolean(getContentResolver(), Settings.System.FORCE_DUAL_PANEL, false));
