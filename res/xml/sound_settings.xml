@@ -109,16 +109,6 @@
             android:entries="@array/emergency_tone_entries"
             android:entryValues="@array/emergency_tone_values" />
 
-    <!-- Volume Rocker -->
-    <PreferenceCategory
-        android:title="@string/volume_buttons_category"/>
-
-    <CheckBoxPreference
-        android:key="volume_wake_screen"
-        android:title="@string/volume_wake_title"
-        android:summary="@string/volume_wake_summary"
-        android:defaultValue="false" />
-
     <!-- Dock -->
     <PreferenceCategory
         android:key="dock_category"
@@ -139,18 +129,6 @@
         android:key="dock_sounds"
         android:title="@string/dock_sounds_enable_title"
         android:defaultValue="false" />
-
-    <PreferenceCategory
-        android:key="button_headsethook"
-        android:title="@string/button_headsethook_title" >
-
-        <CheckBoxPreference
-            android:key="button_headsethook_launch_voice"
-            android:title="@string/button_headsethook_launch_voice_title"
-            android:summary="@string/button_headsethook_launch_voice_summary"
-            android:persistent="false" />
-
-    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/power_notifications_category_title" >
