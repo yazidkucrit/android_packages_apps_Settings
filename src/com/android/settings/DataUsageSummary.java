@@ -48,7 +48,7 @@ import static android.net.TrafficStats.UID_TETHERING;
 import static android.telephony.TelephonyManager.SIM_STATE_READY;
 import static android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
-import static android.widget.LinearLayout.LayoutParams.WRAP_CONTENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.android.internal.util.Preconditions.checkNotNull;
 import static com.android.settings.Utils.prepareCustomPreferencesList;
 
