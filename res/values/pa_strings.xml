@@ -110,6 +110,8 @@
     <string name="navigation_bar_left_title">Left handed mode</string>
     <string name="navigation_bar_left_summary">Place the navigation bar on the left side of the screen in landscape mode</string>
     <string name="navigation_bar_height">Navigation bar height:</string>
+    <string name="navbar_option_info_title">Info</string>
+    <string name="navbar_option_info_summary">Enable Navigation bar in Button Settings to make these options to work</string>
 
     <!-- Navigation ring shortcuts -->
     <string name="navring_target_reset_message">Delete all user created navigation bar shortcuts and restore to default?</string>

@@ -4,38 +4,33 @@
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
     android:key="navbar_settings">
 
-         <CheckBoxPreference
-            android:key="enable_nav_bar"
-            android:title="@string/navigation_bar"
-            android:summary="@string/navigation_bar_summary"
-            android:defaultValue="true" />
+	<Preference
+	    style="?android:preferenceInformationStyle"
+	    android:title="@string/navbar_option_info_title"
+	    android:summary="@string/navbar_option_info_summary" />
 
-         <SeekBarPreference
-             android:key="navigation_bar_height"
-             android:title="@string/navigation_bar_height"
-             android:max="100"
-             android:defaultValue="100"
-             android:dependency="enable_nav_bar" />
+        <SeekBarPreference
+            android:key="navigation_bar_height"
+            android:title="@string/navigation_bar_height"
+            android:max="100"
+            android:defaultValue="100" />
 
         <com.android.settings.preference.SystemCheckBoxPreference
             android:key="navigation_bar_left"
             android:title="@string/navigation_bar_left_title"
             android:summary="@string/navigation_bar_left_summary"
-            android:defaultValue="false"
-            android:dependency="enable_nav_bar" />
+            android:defaultValue="false" />
 
-         <!-- Navring Targets -->
-         <PreferenceScreen
-             android:fragment="com.android.settings.cyanogenmod.NavRing"
-             android:key="navigation_ring_shortcuts"
-             android:title="@string/navigation_ring_title"
-             android:summary="@string/navigation_ring_summary"
-             android:dependency="enable_nav_bar" />
+        <!-- Navring Targets -->
+        <PreferenceScreen
+            android:fragment="com.android.settings.cyanogenmod.NavRing"
+            android:key="navigation_ring_shortcuts"
+            android:title="@string/navigation_ring_title"
+            android:summary="@string/navigation_ring_summary" />
 
         <PreferenceScreen
             android:fragment="com.android.settings.paranoid.NavBar"
             android:key="navigation_bar"
-            android:title="@string/navigation_bar_title"
-            android:dependency="enable_nav_bar" />
+            android:title="@string/navigation_bar_title" />
 
 </PreferenceScreen>
