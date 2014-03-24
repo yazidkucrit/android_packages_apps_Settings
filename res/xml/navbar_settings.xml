@@ -5,6 +5,7 @@
     android:key="navbar_settings">
 
 	<Preference
+            android:key="navigation_bar_info"
 	    style="?android:preferenceInformationStyle"
 	    android:title="@string/navbar_option_info_title"
 	    android:summary="@string/navbar_option_info_summary" />

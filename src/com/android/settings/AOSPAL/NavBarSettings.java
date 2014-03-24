@@ -57,6 +57,7 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
     private static final String KEY_NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
     private static final String NAVIGATION_BAR_CATEGORY = "navigation_bar";
     private static final String NAVIGATION_BAR_LEFT = "navigation_bar_left";
+    private static final String NAVIGATION_BAR_INFO = "navigation_bar_info";
 
     private SeekBarPreference mNavigationBarHeight;
 
@@ -77,6 +78,12 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
 
         if (!DeviceUtils.isPhone(getActivity())) {
             navbarSettings.removePreference(findPreference(NAVIGATION_BAR_LEFT));
+        }
+
+        boolean hasNavBarByDefault = getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar);
+        if (hasNavBarByDefault == true) {
+            navbarSettings.removePreference(findPreference(NAVIGATION_BAR_INFO));
         }
     }
 
