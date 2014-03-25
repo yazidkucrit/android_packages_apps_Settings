@@ -32,6 +32,11 @@
                 android:targetPackage="com.dsht.kerneltweaker" />
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:key="screen_recorder"
+        android:title="@string/screen_recorder_title"
+        android:fragment="com.android.settings.chameleonos.ScreenRecorderSettings" />
+
     <PreferenceCategory
         android:title="@string/remix_settings_interface_title">
 
