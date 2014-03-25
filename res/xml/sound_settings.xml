@@ -26,11 +26,6 @@
             android:persistent="false"
             android:streamType="ring" />
 
-    <PreferenceScreen
-            android:key="volume_steps"
-            android:fragment="com.android.settings.AOSPAL.VolumeSteps"
-            android:title="@string/volume_steps_title" />
-
     <Preference
             android:key="musicfx"
             android:title="@string/musicfx_title">

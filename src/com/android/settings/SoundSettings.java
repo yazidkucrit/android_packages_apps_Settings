@@ -86,7 +86,6 @@ public class SoundSettings extends SettingsPreferenceFragment implements
     private static final String KEY_POWER_NOTIFICATIONS = "power_notifications";
     private static final String KEY_POWER_NOTIFICATIONS_VIBRATE = "power_notifications_vibrate";
     private static final String KEY_POWER_NOTIFICATIONS_RINGTONE = "power_notifications_ringtone";
-    private static final String KEY_VOLUME_STEPS = "volume_steps";
 
     // Request code for power notification ringtone picker
     private static final int REQUEST_CODE_POWER_NOTIFICATIONS_RINGTONE = 1;
@@ -107,14 +106,14 @@ public class SoundSettings extends SettingsPreferenceFragment implements
     private CheckBoxPreference mSoundEffects;
     private CheckBoxPreference mHapticFeedback;
     private CheckBoxPreference mLockSounds;
+    private CheckBoxPreference mVolumeWakeScreen;
+    private CheckBoxPreference mPowerSounds;
+    private CheckBoxPreference mPowerSoundsVibrate;
+    private SeekBarPreference mVibrationDuration;
     private Preference mMusicFx;
     private Preference mRingtonePreference;
     private Preference mNotificationPreference;
     private Preference mPowerSoundsRingtone;
-    private SeekBarPreference mVibrationDuration;
-    private CheckBoxPreference mPowerSounds;
-    private CheckBoxPreference mPowerSoundsVibrate;
-    private PreferenceScreen mVolumeSteps;
 
     private Runnable mRingtoneLookupRunnable;
 
@@ -181,8 +180,6 @@ public class SoundSettings extends SettingsPreferenceFragment implements
             // device with fixed volume policy, do not display volumes submenu
             getPreferenceScreen().removePreference(findPreference(KEY_RING_VOLUME));
         }
-
-        mVolumeSteps = (PreferenceScreen) findPreference(KEY_VOLUME_STEPS);
 
         mVibrateWhenRinging = (CheckBoxPreference) findPreference(KEY_VIBRATE);
         mVibrateWhenRinging.setPersistent(false);
