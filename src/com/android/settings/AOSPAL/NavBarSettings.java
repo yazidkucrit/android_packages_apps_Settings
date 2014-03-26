@@ -50,6 +50,8 @@ import java.io.IOException;
 import java.lang.CharSequence;
 import java.lang.String;
 
+import org.cyanogenmod.hardware.KeyDisabler;
+
 public class NavBarSettings extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
@@ -57,6 +59,7 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
     private static final String KEY_NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
     private static final String NAVIGATION_BAR_CATEGORY = "navigation_bar";
     private static final String NAVIGATION_BAR_LEFT = "navigation_bar_left";
+    private static final String NAVIGATION_BAR_INFO = "navigation_bar_info";
     private static final String ENABLE_NAVIGATION_BAR = "enable_nav_bar";
 
     private SeekBarPreference mNavigationBarHeight;
@@ -88,6 +91,15 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
         if (!DeviceUtils.isPhone(getActivity())) {
             navbarSettings.removePreference(findPreference(NAVIGATION_BAR_LEFT));
         }
+
+        if (KeyDisabler.isSupported() || hasNavBarByDefault == true) {
+            navbarSettings.removePreference(mEnableNavigationBar)
+        }
+
+        if (!KeyDisabler.isSupported() || hasNavBarByDefault == true) {
+            navbarSettings.removePreference(findPreference(NAVIGATION_BAR_INFO));
+        }
+
     }
 
     @Override
