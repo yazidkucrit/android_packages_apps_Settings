@@ -93,7 +93,7 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
         }
 
         if (KeyDisabler.isSupported() || hasNavBarByDefault == true) {
-            navbarSettings.removePreference(mEnableNavigationBar)
+            navbarSettings.removePreference(mEnableNavigationBar);
         }
 
         if (!KeyDisabler.isSupported() || hasNavBarByDefault == true) {
