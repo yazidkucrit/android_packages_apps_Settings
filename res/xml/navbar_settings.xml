@@ -12,8 +12,8 @@
 
          <CheckBoxPreference
             android:key="enable_nav_bar"
-            android:title="@string/navigation_bar"
-            android:summary="@string/navigation_bar_summary"
+            android:title="@string/enable_navbar"
+            android:summary="@string/enable_navbar_summary"
             android:defaultValue="true" />
 
         <SeekBarPreference
