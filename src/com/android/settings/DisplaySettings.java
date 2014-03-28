@@ -24,6 +24,8 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -44,8 +46,11 @@ import android.util.Log;
 
 import com.android.internal.view.RotationPolicy;
 import com.android.settings.DreamSettings;
+import com.android.settings.Utils;
+
 import com.android.settings.slim.DisplayRotation;
 
+import org.cyanogenmod.hardware.AdaptiveBacklight;
 import org.cyanogenmod.hardware.TapToWake;
 
 import java.util.ArrayList;
@@ -62,11 +67,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_FONT_SIZE = "font_size";
     private static final String KEY_NOTIFICATION_PULSE = "notification_pulse";
     private static final String KEY_BATTERY_LIGHT = "battery_light";
+    private static final String KEY_ADAPTIVE_BACKLIGHT = "adaptive_backlight";
     private static final String KEY_SCREEN_SAVER = "screensaver";
     private static final String KEY_ANIMATION_OPTIONS = "category_animation_options";
     private static final String KEY_POWER_CRT_MODE = "system_power_crt_mode";
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
     private static final String KEY_TAP_TO_WAKE = "double_tap_wake_gesture";
+    private static final String KEY_SCREEN_COLOR_SETTINGS = "screencolor_settings";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -78,15 +85,18 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private PreferenceScreen mDisplayRotationPreference;
     private CheckBoxPreference mWakeWhenPluggedOrUnplugged;
     private FontDialogPreference mFontSizePref;
+
     private PreferenceScreen mNotificationPulse;
+    private PreferenceScreen mBatteryPulse;
+    private PreferenceScreen mScreenColorSettings;
 
     private final Configuration mCurConfig = new Configuration();
 
     private ListPreference mScreenTimeoutPreference;
     private Preference mScreenSaverPreference;
-    private PreferenceScreen mBatteryPulse;
 
     private ListPreference mCrtMode;
+    private CheckBoxPreference mAdaptiveBacklight;
     private CheckBoxPreference mTapToWake;
 
     private ContentObserver mAccelerometerRotationObserver =
@@ -117,6 +127,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             getPreferenceScreen().removePreference(mScreenSaverPreference);
         }
 
+        mAdaptiveBacklight = (CheckBoxPreference) findPreference(KEY_ADAPTIVE_BACKLIGHT);
+        if (!AdaptiveBacklight.isSupported()) {
+            getPreferenceScreen().removePreference(mAdaptiveBacklight);
+            mAdaptiveBacklight = null;
+        }
+
         mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);
         final long currentTimeout = Settings.System.getLong(resolver, SCREEN_OFF_TIMEOUT,
                 FALLBACK_SCREEN_TIMEOUT_VALUE);
@@ -139,21 +155,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         mFontSizePref.setOnPreferenceChangeListener(this);
         mFontSizePref.setOnPreferenceClickListener(this);
 
-        boolean hasNotificationLed = res.getBoolean(
-                com.android.internal.R.bool.config_intrusiveNotificationLed);
-        boolean hasBatteryLed = res.getBoolean(
-                com.android.internal.R.bool.config_intrusiveBatteryLed);
-        mNotificationPulse = (PreferenceScreen) findPreference(KEY_NOTIFICATION_PULSE);
-        mBatteryPulse = (PreferenceScreen) findPreference(KEY_BATTERY_LIGHT);
-        if (!hasNotificationLed) {
-            getPreferenceScreen().removePreference(mNotificationPulse);
-            mNotificationPulse = null;
-        }
-        if (!hasBatteryLed) {
-            getPreferenceScreen().removePreference(mBatteryPulse);
-            mBatteryPulse = null;
-        }
-
         // respect device default configuration
         // true fades while false animates
         boolean electronBeamFadesConfig = getResources().getBoolean(
@@ -175,6 +176,26 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         if (!isTapToWakeSupported()) {
             getPreferenceScreen().removePreference(mTapToWake);
             mTapToWake = null;
+        }
+
+        boolean hasNotificationLed = res.getBoolean(
+                com.android.internal.R.bool.config_intrusiveNotificationLed);
+        boolean hasBatteryLed = res.getBoolean(
+                com.android.internal.R.bool.config_intrusiveBatteryLed);
+        mNotificationPulse = (PreferenceScreen) findPreference(KEY_NOTIFICATION_PULSE);
+        mBatteryPulse = (PreferenceScreen) findPreference(KEY_BATTERY_LIGHT);
+        if (!hasNotificationLed) {
+            getPreferenceScreen().removePreference(mNotificationPulse);
+            mNotificationPulse = null;
+        }
+        if (!hasBatteryLed) {
+            getPreferenceScreen().removePreference(mBatteryPulse);
+            mBatteryPulse = null;
+        }
+
+        mScreenColorSettings = (PreferenceScreen) findPreference(KEY_SCREEN_COLOR_SETTINGS);
+        if (!isPostProcessingSupported()) {
+            getPreferenceScreen().removePreference(mScreenColorSettings);
         }
     }
 
@@ -283,7 +304,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), true,
                 mAccelerometerRotationObserver);
         updateDisplayRotationPreferenceDescription();
-
+        if (mAdaptiveBacklight != null) {
+            mAdaptiveBacklight.setChecked(AdaptiveBacklight.isEnabled());
+        }
         if (mTapToWake != null) {
             mTapToWake.setChecked(TapToWake.isEnabled());
         }
@@ -407,6 +430,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                     Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                     mWakeWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
             return true;
+        } else if (preference == mAdaptiveBacklight) {
+            return AdaptiveBacklight.setEnabled(mAdaptiveBacklight.isChecked());
         } else if (preference == mTapToWake) {
             return TapToWake.setEnabled(mTapToWake.isChecked());
         }
@@ -468,12 +493,48 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
     }
 
+    private boolean isPostProcessingSupported() {
+        boolean ret = true;
+        final PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo("com.qualcomm.display", PackageManager.GET_META_DATA);
+        } catch (NameNotFoundException e) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    private static boolean isAdaptiveBacklightSupported() {
+        try {
+            return AdaptiveBacklight.isSupported();
+        } catch (NoClassDefFoundError e) {
+            // Hardware abstraction framework not installed
+            return false;
+        }
+    }
+
     private static boolean isTapToWakeSupported() {
         try {
             return TapToWake.isSupported();
         } catch (NoClassDefFoundError e) {
             // Hardware abstraction framework not installed
             return false;
+        }
+    }
+
+    /**
+     * Restore the properties associated with this preference on boot
+     * @param ctx A valid context
+     */
+    public static void restore(Context ctx) {
+        if (AdaptiveBacklight.isSupported()) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+            final boolean enabled = prefs.getBoolean(KEY_ADAPTIVE_BACKLIGHT, true);
+            if (!AdaptiveBacklight.setEnabled(enabled)) {
+                Log.e(TAG, "Failed to restore adaptive backlight settings.");
+            } else {
+                Log.d(TAG, "Adaptive backlight settings restored.");
+            }
         }
     }
 }
