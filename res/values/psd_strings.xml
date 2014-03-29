@@ -37,6 +37,7 @@
     <string name="personalize">Personalize</string>
     <string name="controls">Controls</string>
     <string name="attention">Attention</string>
+    <string name="more">More</string>
 
    <!-- Remix Settings -->
     <string name="remix_settings_title">Remix Settings</string>
@@ -48,6 +49,7 @@
     <string name="remix_settings_interface_title">Interface</string>
     <string name="remix_settings_notification_drawer_qs">Notification Drawer and QS</string>
     <string name="remix_settings_notification_drawer">Notification Drawer</string>
+    <string name="remix_settings_bugreport">Bug Report</string>
 
     <!-- Remix Settings - Summaries -->
     <string name="navigation_ring_summary">Set custom navigation bar targets besides than Google Now</string>
@@ -420,10 +422,6 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <!-- Force dual panel -->
     <string name="force_dualpanel_title">Force dual panel</string>
     <string name="force_dualpanel_summary">This will enable/disable dual panel settings"</string>
-
-    <!-- Add option to hide power menu when screen is locked -->
-    <string name="lockscreen_power_menu_title">Enable power menu</string>
-    <string name="lockscreen_power_menu_summary">Show power menu when screen is locked</string>
 
     <!-- Lockscreen style settings -->
     <string name="lockscreen_style_reset_message">Reset all lockscreen colors?</string>
@@ -878,10 +876,6 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="toast_Translucent_animation">Translucent Animation</string>
     <string name="toast_SlideLeftRight_animation">Slide Left To Right Animation</string>
     <string name="toast_SlideRightLeft_animation">Slide Right To Left Animation</string>
-
-    <!-- Keyguard always show battery -->
-    <string name="lockscreen_battery_status_title">Battery status</string>
-    <string name="lockscreen_battery_status_summary">Always show battery status on keyguard</string>
 
     <!-- Partition Info -->
     <string name="partition_info_title">Partition info</string>

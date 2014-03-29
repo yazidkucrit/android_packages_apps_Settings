@@ -1,11 +1,16 @@
 package com.android.settings.AOSPAL;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.preference.CheckBoxPreference;
@@ -38,6 +43,8 @@ import java.util.List;
 
 public class RemixSettings extends SettingsPreferenceFragment {
 
+    private static final String BUGREPORT_URL = "https://sites.google.com/site/aospalrom/bug-report";
+
     PagerTabStrip mPagerTabStrip;
     ViewPager mViewPager;
 
@@ -49,6 +56,8 @@ public class RemixSettings extends SettingsPreferenceFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContainer = container;
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setIcon(R.drawable.ic_settings_system);
 
         View view = inflater.inflate(R.layout.remix_settings, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
@@ -59,6 +68,7 @@ public class RemixSettings extends SettingsPreferenceFragment {
         StatusBarAdapter StatusBarAdapter = new StatusBarAdapter(getFragmentManager());
         mViewPager.setAdapter(StatusBarAdapter);
 
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -79,6 +89,28 @@ public class RemixSettings extends SettingsPreferenceFragment {
 
         if (!DeviceUtils.isTablet(getActivity())) {
             mContainer.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.remix_settings_item, menu);
+    }
+
+    /**
+     * On selecting action bar icons
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+        case R.id.action_bugreport:
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BUGREPORT_URL));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getActivity().startActivity(intent);
+            return true;
+        default:
+            return super.onContextItemSelected(item);
         }
     }
 

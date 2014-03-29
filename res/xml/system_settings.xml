@@ -35,6 +35,7 @@
     <PreferenceScreen
         android:key="screen_recorder"
         android:title="@string/screen_recorder_title"
+        android:icon="@drawable/ic_settings_src"
         android:fragment="com.android.settings.chameleonos.ScreenRecorderSettings" />
 
     <PreferenceCategory
@@ -45,6 +46,16 @@
             android:title="@string/force_dualpanel_title"
             android:summary="@string/force_dualpanel_summary"
             android:defaultValue="false" />
+
+        <PreferenceScreen
+            android:key="progressbar_settings"
+            android:fragment="com.android.settings.cyanogenmod.ProgressBar"
+            android:title="@string/progressbar_title" />
+
+   </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/general">
 
         <CheckBoxPreference
             android:key="reverse_default_app_picker"
@@ -57,16 +68,11 @@
             android:summary="@string/double_tap_to_sleep_summary"
             android:defaultValue="false" />
 
-        <PreferenceScreen
-            android:key="progressbar_settings"
-            android:fragment="com.android.settings.cyanogenmod.ProgressBar"
-            android:title="@string/progressbar_title" />
-
    </PreferenceCategory>
 
    <PreferenceCategory
-            android:key="category_recent_panel"
-            android:title="@string/recent_apps_panel_title">
+        android:key="category_recent_panel"
+        android:title="@string/recent_apps_panel_title">
 
         <!-- Recents RAM bar -->
         <PreferenceScreen
