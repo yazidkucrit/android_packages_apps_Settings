@@ -23,7 +23,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -52,7 +54,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
     protected Context mContext;
 
     // Need to use AOKP Custom system animation
-    protected ContentResolver mContentRes; 
+    protected ContentResolver mContentRes;
 
     // Cache the content resolver for async callbacks
     private ContentResolver mContentResolver;
@@ -64,7 +66,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
 	mContext = getActivity().getApplicationContext();
 
 	// Need to use AOKP Custom system animation
-        mContentRes = getActivity().getContentResolver(); 
+        mContentRes = getActivity().getContentResolver();
 
         // Prepare help url and enable menu if necessary
         int helpResource = getHelpResource();
@@ -331,5 +333,20 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
     // Need to AOKP Custom system animation
     public void setTitle(int resId) {
         getActivity().setTitle(resId);
-    }  
+    }
+
+    public boolean isPackageInstalled(String packageName) {
+        if (packageName != null) {
+            try {
+                PackageInfo pi = getPackageManager().getPackageInfo(packageName, 0);
+                if (!pi.applicationInfo.enabled) {
+                    return false;
+                }
+            } catch (NameNotFoundException e) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
