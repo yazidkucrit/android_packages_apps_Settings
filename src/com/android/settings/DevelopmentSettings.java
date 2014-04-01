@@ -148,9 +148,6 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String ENABLE_QUICKBOOT_KEY = "enable_quickboot";
     private static final String QUICKBOOT_PACKAGE_NAME = "com.qapp.quickboot";
 
-    private static final String ENABLE_QUICKBOOT_KEY = "enable_quickboot";
-    private static final String QUICKBOOT_PACKAGE_NAME = "com.qapp.quickboot";
-
     private static final String OPENGL_TRACES_KEY = "enable_opengl_traces";
 
     private static final String IMMEDIATELY_DESTROY_ACTIVITIES_KEY
