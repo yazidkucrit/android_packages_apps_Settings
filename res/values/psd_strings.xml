@@ -23,9 +23,9 @@
     <string name="psd_version_default">Unknown</string>
 
     <!--Saber version-->
-    <string name="sm_android">SM android base</string>
+    <string name="sm_android">Saber android version</string>
     <string name="sm_android_default">Unknown</string>
-    <string name="sm_arm">SM kernel base</string>
+    <string name="sm_arm">Saber arm version</string>
     <string name="sm_arm_default">Unknown</string>
 
     <!-- About phone screen, build date of ROM -->
@@ -442,6 +442,10 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="lockscreen_targets_color_summary">Color of the challenge targets</string>
     <string name="lockscreen_misc_color_title">Miscellaneous color</string>
     <string name="lockscreen_misc_color_summary">Color of the remaining items</string>
+
+    <!-- Lockscreen wallpaper -->
+    <string name="lockscreen_wallpaper">Custom wallpaper</string>
+    <string name="select_wallpaper">Select wallpaper</string>
 
     <!-- Lockscreen widget settings -->
     <string name="lockscreen_widgets_title">Widgets</string>
