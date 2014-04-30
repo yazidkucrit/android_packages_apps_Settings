@@ -62,21 +62,11 @@
                 android:summary="@string/summary_font_size"
                 android:dialogTitle="@string/dialog_title_font_size" />
 
-        <PreferenceScreen
-                android:fragment="com.android.settings.notificationlight.NotificationLightSettings"
-                android:key="notification_pulse"
-                android:title="@string/notification_led_category_title" />
-
         <CheckBoxPreference
             android:key="wake_when_plugged_or_unplugged"
             android:title="@string/wake_when_plugged_or_unplugged_title"
             android:summary="@string/wake_when_plugged_or_unplugged_summary"
             android:defaultValue="false" />
-
-        <PreferenceScreen
-                android:key="battery_light"
-                android:title="@string/battery_light_title"
-                android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
 
         <PreferenceScreen
                 android:key="wifi_display"
@@ -94,4 +84,25 @@
             android:title="@string/double_tap_to_wake_title"
             android:summary="@string/double_tap_to_wake_summary"
             android:defaultValue="false" />
+
+        <!-- Notifications -->
+        <PreferenceCategory
+            android:key="notification_category"
+            android:title="@string/notification_category"/>
+
+        <CheckBoxPreference
+            android:key="notification_peek"
+            android:title="@string/notification_peek_title"
+            android:summary="@string/notification_peek_summary" />
+
+        <PreferenceScreen
+                android:fragment="com.android.settings.notificationlight.NotificationLightSettings"
+                android:key="notification_pulse"
+                android:title="@string/notification_led_category_title" />
+
+        <PreferenceScreen
+                android:key="battery_light"
+                android:title="@string/battery_light_title"
+                android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
+
 </PreferenceScreen>
