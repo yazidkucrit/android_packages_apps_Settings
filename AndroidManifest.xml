@@ -1726,12 +1726,12 @@
             android:theme="@style/CryptKeeperBlankTheme"
         />
 
-        <activity android:name=".chameleonos.labs.gestureanywhere.GestureAnywhereBuilderActivity" />
-        <activity android:name=".chameleonos.labs.gestureanywhere.GestureAnywhereCreateGestureActivity" />
-
-        <activity android:name=".cyanogenmod.AutoBrightnessSetup"
+        <activity android:name=".slim.AutoBrightnessSetup"
                 android:excludeFromRecents="true"
                 android:theme="@*android:style/Theme.Holo.Dialog.Alert" />
+
+        <activity android:name=".chameleonos.labs.gestureanywhere.GestureAnywhereBuilderActivity" />
+        <activity android:name=".chameleonos.labs.gestureanywhere.GestureAnywhereCreateGestureActivity" />
 
 	<activity android:name=".AOSPAL.RamBar" />
 

@@ -41,12 +41,6 @@
     <PreferenceCategory
         android:title="@string/remix_settings_interface_title">
 
-        <CheckBoxPreference
-            android:key="force_dualpanel"
-            android:title="@string/force_dualpanel_title"
-            android:summary="@string/force_dualpanel_summary"
-            android:defaultValue="false" />
-
         <PreferenceScreen
             android:key="progressbar_settings"
             android:fragment="com.android.settings.cyanogenmod.ProgressBar"

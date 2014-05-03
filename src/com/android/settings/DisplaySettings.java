@@ -70,6 +70,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_BATTERY_LIGHT = "battery_light";
     private static final String KEY_ADAPTIVE_BACKLIGHT = "adaptive_backlight";
     private static final String KEY_SCREEN_SAVER = "screensaver";
+    private static final String KEY_PEEK = "notification_peek";
     private static final String KEY_ANIMATION_OPTIONS = "category_animation_options";
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
     private static final String KEY_TAP_TO_WAKE = "double_tap_wake_gesture";
@@ -83,6 +84,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String ROTATION_ANGLE_180 = "180";
     private static final String ROTATION_ANGLE_270 = "270";
 
+    private CheckBoxPreference mNotificationPeek;
     private PreferenceScreen mDisplayRotationPreference;
     private CheckBoxPreference mNotificationPeek;
     private FontDialogPreference mFontSizePref;
@@ -286,24 +288,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 mBatteryPulse.setSummary(R.string.notification_light_disabled);
             }
         }
-    }
-
-    public void readFontSizePreference(ListPreference pref) {
-        try {
-            mCurConfig.updateFrom(ActivityManagerNative.getDefault().getConfiguration());
-        } catch (RemoteException e) {
-            Log.w(TAG, "Unable to retrieve font size");
-        }
-
-        // mark the appropriate item in the preferences list
-        int index = floatToIndex(mCurConfig.fontScale);
-        pref.setValueIndex(index);
-
-        // report the current size in the summary text
-        final Resources res = getResources();
-        String[] fontSizeNames = res.getStringArray(R.array.entries_font_size);
-        pref.setSummary(String.format(res.getString(R.string.summary_font_size),
-                fontSizeNames[index]));
     }
 
     @Override
