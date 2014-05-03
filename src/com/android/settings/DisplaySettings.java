@@ -75,7 +75,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
     private static final String KEY_TAP_TO_WAKE = "double_tap_wake_gesture";
     private static final String KEY_SCREEN_COLOR_SETTINGS = "screencolor_settings";
-    private static final String KEY_PEEK = "notification_peek";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -86,7 +85,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private CheckBoxPreference mNotificationPeek;
     private PreferenceScreen mDisplayRotationPreference;
-    private CheckBoxPreference mNotificationPeek;
     private FontDialogPreference mFontSizePref;
     private CheckBoxPreference mWakeWhenPluggedOrUnplugged;
 
