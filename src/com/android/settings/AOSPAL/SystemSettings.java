@@ -30,12 +30,10 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     private static final String SYSTEM_SETTINGS = "system_settings";
 
     private static final String KEY_REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
-    private static final String RECENT_MENU_CLEAR_ALL = "recent_menu_clear_all";
     private static final String RECENT_MENU_CLEAR_ALL_LOCATION = "recent_menu_clear_all_location";
     private static final String TELO_RADIO_SETTINGS = "telo_radio_settings";
 
     private ListPreference mRecentClearAllPosition;
-    private CheckBoxPreference mRecentClearAll;
     private CheckBoxPreference mReverseDefaultAppPicker;
 
     @Override
@@ -56,11 +54,6 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         mReverseDefaultAppPicker = (CheckBoxPreference) findPreference(KEY_REVERSE_DEFAULT_APP_PICKER);
         mReverseDefaultAppPicker.setChecked(Settings.System.getInt(getContentResolver(),
                     Settings.System.REVERSE_DEFAULT_APP_PICKER, 0) != 0);
-
-        mRecentClearAll = (CheckBoxPreference) prefs.findPreference(RECENT_MENU_CLEAR_ALL);
-        mRecentClearAll.setChecked(Settings.System.getInt(getContentResolver(),
-            Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 1) == 1);
-        mRecentClearAll.setOnPreferenceChangeListener(this);
         mRecentClearAllPosition = (ListPreference) prefs.findPreference(RECENT_MENU_CLEAR_ALL_LOCATION);
         String recentClearAllPosition = Settings.System.getString(getContentResolver(), Settings.System.CLEAR_RECENTS_BUTTON_LOCATION);
         if (recentClearAllPosition != null) {
@@ -75,11 +68,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mRecentClearAll) {
-            Settings.System.putInt(getContentResolver(), Settings.System.SHOW_CLEAR_RECENTS_BUTTON,
-                    (Boolean) newValue ? 1 : 0);
-            return true;
-        } else if (preference == mRecentClearAllPosition) {
+        if (preference == mRecentClearAllPosition) {
             Settings.System.putString(getContentResolver(), Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, (String) newValue);
             return true;
         } else {
