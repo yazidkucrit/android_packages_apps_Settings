@@ -41,6 +41,12 @@
     <PreferenceCategory
         android:title="@string/remix_settings_interface_title">
 
+        <!-- Recents RAM bar -->
+        <PreferenceScreen
+            android:key="recents_ram_bar"
+            android:fragment="com.android.settings.AOSPAL.RamBar"
+            android:title="@string/ram_bar" />
+
         <PreferenceScreen
             android:key="progressbar_settings"
             android:fragment="com.android.settings.cyanogenmod.ProgressBar"
@@ -65,26 +71,6 @@
             android:key="double_tap_sleep_lockscreen"
             android:title="@string/double_tap_to_sleep_lockscreen_title"
             android:defaultValue="false" />
-
-   </PreferenceCategory>
-
-   <PreferenceCategory
-        android:key="category_recent_panel"
-        android:title="@string/recent_apps_panel_title">
-
-        <!-- Recents RAM bar -->
-        <PreferenceScreen
-            android:key="recents_ram_bar"
-            android:fragment="com.android.settings.AOSPAL.RamBar"
-            android:title="@string/ram_bar" />
-
-        <ListPreference
-            android:key="recent_menu_clear_all_location"
-            android:title="@string/recent_clear_all_button_location_title"
-            android:summary="@string/recent_clear_all_button_location_summary"
-            android:entries="@array/recent_clear_all_button_location_entries"
-            android:entryValues="@array/recent_clear_all_button_location_values"
-            android:defaultValue="2" />
 
    </PreferenceCategory>
 
