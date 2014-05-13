@@ -120,4 +120,24 @@
         android:title="@string/dock_sounds_enable_title"
         android:defaultValue="false" />
 
+    <PreferenceCategory
+        android:key="button_headsethook"
+        android:title="@string/button_headsethook_title" >
+
+        <com.android.settings.preference.SystemCheckBoxPreference
+            android:key="headsethook_launch_voice"
+            android:title="@string/button_headsethook_launch_voice_title"
+            android:summary="@string/button_headsethook_launch_voice_summary"
+            android:persistent="false" />
+
+        <com.android.settings.preference.AppSelectListPreference
+            android:key="headset_plug"
+            android:title="@string/headset_plug_enable_title"
+            android:positiveButtonText="@string/headset_plug_positive_title"
+            settings:neutralButtonText="@string/headset_plug_neutral_title"
+            settings:neutralButtonValue="SYSTEM_DEFAULT"
+            android:persistent="false"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
