@@ -61,6 +61,8 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
     private static final String NAVIGATION_BAR_LEFT = "navigation_bar_left";
     private static final String NAVIGATION_BAR_INFO = "navigation_bar_info";
     private static final String ENABLE_NAVIGATION_BAR = "enable_nav_bar";
+    private static final String CATEGORY_NAVBAR_GENERAL = "category_navbar_general";
+    private static final String CATEGORY_NAVBAR_CONTROLS = "category_navbar_controls";
 
     private SeekBarPreference mNavigationBarHeight;
     private CheckBoxPreference mEnableNavigationBar;
@@ -85,15 +87,16 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
         mEnableNavigationBar.setChecked(enableNavigationBar);
         mEnableNavigationBar.setOnPreferenceChangeListener(this);
 
-        PreferenceScreen navbarSettings =
-            (PreferenceScreen) findPreference(NAVBAR_SETTINGS);
+        PreferenceScreen navbarSettings = (PreferenceScreen) findPreference(NAVBAR_SETTINGS);
+
+        PreferenceCategory generalCategory = (PreferenceCategory) findPreference(CATEGORY_NAVBAR_GENERAL);
 
         if (!DeviceUtils.isPhone(getActivity())) {
-            navbarSettings.removePreference(findPreference(NAVIGATION_BAR_LEFT));
+            navbarSettings.removePreference(findPreference(CATEGORY_NAVBAR_CONTROLS));
         }
 
         if (KeyDisabler.isSupported() || hasNavBarByDefault == true) {
-            navbarSettings.removePreference(mEnableNavigationBar);
+            generalCategory.removePreference(mEnableNavigationBar);
         }
 
         if (!KeyDisabler.isSupported() || hasNavBarByDefault == true) {

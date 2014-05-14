@@ -99,7 +99,6 @@ public class SoundSettings extends SettingsPreferenceFragment implements
     private CheckBoxPreference mSoundEffects;
     private CheckBoxPreference mHapticFeedback;
     private CheckBoxPreference mLockSounds;
-    private CheckBoxPreference mVolumeWakeScreen;
     private SeekBarPreference mVibrationDuration;
     private Preference mMusicFx;
     private Preference mRingtonePreference;
