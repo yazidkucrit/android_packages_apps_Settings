@@ -17,9 +17,6 @@
 
 package com.android.settings;
 
-import com.android.settings.bluetooth.DockEventReceiver;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
@@ -33,7 +30,6 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.media.AudioManager;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
@@ -52,8 +48,13 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.android.settings.bluetooth.DockEventReceiver;
+import com.android.settings.preference.AppSelectListPreference;
+import com.android.settings.R;
+import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.widget.SeekBarPreference;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class SoundSettings extends SettingsPreferenceFragment implements
@@ -83,15 +84,7 @@ public class SoundSettings extends SettingsPreferenceFragment implements
     private static final String KEY_DOCK_AUDIO_SETTINGS = "dock_audio";
     private static final String KEY_DOCK_SOUNDS = "dock_sounds";
     private static final String KEY_DOCK_AUDIO_MEDIA_ENABLED = "dock_audio_media_enabled";
-    private static final String KEY_POWER_NOTIFICATIONS = "power_notifications";
-    private static final String KEY_POWER_NOTIFICATIONS_VIBRATE = "power_notifications_vibrate";
-    private static final String KEY_POWER_NOTIFICATIONS_RINGTONE = "power_notifications_ringtone";
-
-    // Request code for power notification ringtone picker
-    private static final int REQUEST_CODE_POWER_NOTIFICATIONS_RINGTONE = 1;
-
-    // Used for power notification uri string if set to silent
-    private static final String POWER_NOTIFICATIONS_SILENT_URI = "silent";
+    private static final String KEY_HEADSET_PLUG = "headset_plug";
 
     private static final String[] NEED_VOICE_CAPABILITY = {
             KEY_RINGTONE, KEY_DTMF_TONE, KEY_CATEGORY_CALLS,
@@ -106,14 +99,10 @@ public class SoundSettings extends SettingsPreferenceFragment implements
     private CheckBoxPreference mSoundEffects;
     private CheckBoxPreference mHapticFeedback;
     private CheckBoxPreference mLockSounds;
-    private CheckBoxPreference mVolumeWakeScreen;
-    private CheckBoxPreference mPowerSounds;
-    private CheckBoxPreference mPowerSoundsVibrate;
     private SeekBarPreference mVibrationDuration;
     private Preference mMusicFx;
     private Preference mRingtonePreference;
     private Preference mNotificationPreference;
-    private Preference mPowerSoundsRingtone;
 
     private Runnable mRingtoneLookupRunnable;
 
@@ -128,6 +117,8 @@ public class SoundSettings extends SettingsPreferenceFragment implements
 
     private boolean mFirstVibration = false;
 
+    private AppSelectListPreference mHeadsetPlug;
+    
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -213,13 +204,16 @@ public class SoundSettings extends SettingsPreferenceFragment implements
         mLockSounds.setChecked(Settings.System.getInt(resolver,
                 Settings.System.LOCKSCREEN_SOUNDS_ENABLED, 1) != 0);
 
+        mHeadsetPlug = (AppSelectListPreference) findPreference(KEY_HEADSET_PLUG);
+        mHeadsetPlug.setOnPreferenceChangeListener(this);
+        updateHeadsetPlugSummary();
+
         mRingtonePreference = findPreference(KEY_RINGTONE);
         mNotificationPreference = findPreference(KEY_NOTIFICATION_SOUND);
 
         if (mVib == null || !mVib.hasVibrator()) {
             removePreference(KEY_VIBRATE);
             removePreference(KEY_HAPTIC_FEEDBACK);
-            removePreference(KEY_POWER_NOTIFICATIONS_VIBRATE);
             removePreference(KEY_VIBRATION_DURATION);
         }
 
@@ -270,37 +264,6 @@ public class SoundSettings extends SettingsPreferenceFragment implements
         };
 
         initDockSettings();
-
-       // power state change notification sounds
-        mPowerSounds = (CheckBoxPreference) findPreference(KEY_POWER_NOTIFICATIONS);
-        mPowerSounds.setChecked(Settings.Global.getInt(getContentResolver(),
-                Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) != 0);
-        mPowerSoundsVibrate = (CheckBoxPreference) findPreference(KEY_POWER_NOTIFICATIONS_VIBRATE);
-        mPowerSoundsVibrate.setChecked(Settings.Global.getInt(getContentResolver(),
-                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) != 0);
-
-        mPowerSoundsRingtone = findPreference(KEY_POWER_NOTIFICATIONS_RINGTONE);
-        String currentPowerRingtonePath =
-                Settings.Global.getString(getContentResolver(),
-                    Settings.Global.POWER_NOTIFICATIONS_RINGTONE);
-
-        // set to default notification if we don't yet have one
-        if (currentPowerRingtonePath == null) {
-                currentPowerRingtonePath = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
-                Settings.Global.putString(getContentResolver(),
-                        Settings.Global.POWER_NOTIFICATIONS_RINGTONE, currentPowerRingtonePath);
-        }
-        // is it silent ?
-        if (currentPowerRingtonePath.equals(POWER_NOTIFICATIONS_SILENT_URI)) {
-            mPowerSoundsRingtone.setSummary(
-                    getString(R.string.power_notifications_ringtone_silent));
-        } else {
-            final Ringtone ringtone =
-                    RingtoneManager.getRingtone(getActivity(), Uri.parse(currentPowerRingtonePath));
-            if (ringtone != null) {
-                mPowerSoundsRingtone.setSummary(ringtone.getTitle(getActivity()));
-            }
-        }
     }
 
     @Override
@@ -410,16 +373,6 @@ public class SoundSettings extends SettingsPreferenceFragment implements
         } else if (preference == mDockAudioMediaEnabled) {
             Settings.Global.putInt(getContentResolver(), Settings.Global.DOCK_AUDIO_MEDIA_ENABLED,
                     mDockAudioMediaEnabled.isChecked() ? 1 : 0);
-        } else if (preference == mPowerSounds) {
-            Settings.Global.putInt(getContentResolver(), Settings.Global.POWER_NOTIFICATIONS_ENABLED,
-                    mPowerSounds.isChecked() ? 1 : 0);
-        } else if (preference == mPowerSoundsVibrate) {
-            Settings.Global.putInt(getContentResolver(), Settings.Global.POWER_NOTIFICATIONS_VIBRATE,
-                    mPowerSoundsVibrate.isChecked() ? 1 : 0);
-        } else if (preference == mPowerSoundsRingtone) {
-            launchNotificationSoundPicker(REQUEST_CODE_POWER_NOTIFICATIONS_RINGTONE,
-                    Settings.Global.getString(getContentResolver(),
-                            Settings.Global.POWER_NOTIFICATIONS_RINGTONE));
         }
         return true;
     }
@@ -434,8 +387,7 @@ public class SoundSettings extends SettingsPreferenceFragment implements
             } catch (NumberFormatException e) {
                 Log.e(TAG, "could not persist emergency tone setting", e);
             }
-        }
-        if (preference == mVibrationDuration) {
+        } else if (preference == mVibrationDuration) {
             int value = Integer.parseInt((String) objValue);
             Settings.System.putInt(getContentResolver(),
                     Settings.System.MINIMUM_VIBRATION_DURATION, value);
@@ -443,8 +395,41 @@ public class SoundSettings extends SettingsPreferenceFragment implements
                 mVib.vibrate(1);
             }
             mFirstVibration = true;
+        } else if (preference == mHeadsetPlug) {
+           String value = (String) objValue;
+           Settings.System.putString(getContentResolver(),
+                    Settings.System.HEADSET_PLUG_ENABLED, value);
+           updateHeadsetPlugSummary();
         }
         return true;
+    }
+
+    private void updateHeadsetPlugSummary(){
+        final PackageManager packageManager = getPackageManager();
+
+        mHeadsetPlug.setSummary(getResources().getString(R.string.headset_plug_positive_title));
+
+        String headSetPlugIntentUri = Settings.System.getString(getContentResolver(), Settings.System.HEADSET_PLUG_ENABLED);
+
+        if (headSetPlugIntentUri != null) {
+            if(headSetPlugIntentUri.equals(Settings.System.HEADSET_PLUG_SYSTEM_DEFAULT)) {
+                 mHeadsetPlug.setSummary(getResources().getString(R.string.headset_plug_neutral_summary));
+            } else {
+                Intent headSetPlugIntent = null;
+                try {
+                    headSetPlugIntent = Intent.parseUri(headSetPlugIntentUri, 0);
+                } catch (URISyntaxException e) {
+                    headSetPlugIntent = null;
+                }
+
+                if(headSetPlugIntent != null) {
+                    ResolveInfo info = packageManager.resolveActivity(headSetPlugIntent, 0);
+                    if (info != null) {
+                        mHeadsetPlug.setSummary(info.loadLabel(packageManager));
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -532,59 +517,5 @@ public class SoundSettings extends SettingsPreferenceFragment implements
         ab.setMessage(R.string.dock_not_found_text);
         ab.setPositiveButton(android.R.string.ok, null);
         return ab.create();
-    }
-
-    private void launchNotificationSoundPicker(int code, String currentPowerRingtonePath) {
-        final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
-                getString(R.string.power_notifications_ringtone_title));
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
-                RingtoneManager.TYPE_NOTIFICATION);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                Settings.System.DEFAULT_NOTIFICATION_URI);
-        if (currentPowerRingtonePath != null &&
-                !currentPowerRingtonePath.equals(POWER_NOTIFICATIONS_SILENT_URI)) {
-            Uri uri = Uri.parse(currentPowerRingtonePath);
-            if (uri != null) {
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, uri);
-            }
-        }
-        startActivityForResult(intent, code);
-    }
-
-    private void setPowerNotificationRingtone(Intent intent) {
-        final Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-
-        final String toneName;
-        final String toneUriPath;
-
-        if ( uri != null ) {
-            final Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), uri);
-            toneName = ringtone.getTitle(getActivity());
-            toneUriPath = uri.toString();
-        } else {
-            // silent
-            toneName = getString(R.string.power_notifications_ringtone_silent);
-            toneUriPath = POWER_NOTIFICATIONS_SILENT_URI;
-        }
-
-        mPowerSoundsRingtone.setSummary(toneName);
-        Settings.Global.putString(getContentResolver(),
-                Settings.Global.POWER_NOTIFICATIONS_RINGTONE, toneUriPath);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_POWER_NOTIFICATIONS_RINGTONE:
-                if (resultCode == Activity.RESULT_OK) {
-                    setPowerNotificationRingtone(data);
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
-        }
     }
 }

@@ -48,11 +48,11 @@
     <!-- Volume Rocker Wake Support. Some devices do not support (PMU) this.
          Setting to false will disable Volume Rocker Wake support -->
     <bool name="config_show_volumeRockerWake">false</bool>
-
-    <!-- Processor menu, freq cap files -->
-    <string name="max_cpu_freq_file" translatable="false">/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq</string>
-    <string name="min_cpu_freq_file" translatable="false">/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq</string>
     <!-- **** AOSPAL ADDITIONS END **** -->
+
+    <!-- Multi SIM Tune Away/Priority Subscription Support. Some device RILs do not support this.
+         Setting to false will disable Tune Away/Priority Subscription support -->
+    <bool name="config_HasTuneAway">false</bool>
 
     <!-- This used to define screen color's Hue progress bar minimum value -->
     <integer name="minimum_hue_value" translatable="false">0</integer>

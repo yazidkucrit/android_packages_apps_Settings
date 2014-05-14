@@ -121,27 +121,22 @@
         android:defaultValue="false" />
 
     <PreferenceCategory
-        android:title="@string/power_notifications_category_title" >
+        android:key="button_headsethook"
+        android:title="@string/button_headsethook_title" >
 
-        <CheckBoxPreference
-            android:key="power_notifications"
-            android:title="@string/power_notifications_enable_title"
-            android:summary="@string/power_notifications_enable_summary"
-            android:defaultValue="false"
+        <com.android.settings.preference.SystemCheckBoxPreference
+            android:key="headsethook_launch_voice"
+            android:title="@string/button_headsethook_launch_voice_title"
+            android:summary="@string/button_headsethook_launch_voice_summary"
             android:persistent="false" />
 
-        <CheckBoxPreference
-            android:key="power_notifications_vibrate"
-            android:title="@string/power_notifications_vibrate_title"
-            android:defaultValue="false"
-            android:dependency="power_notifications"
-            android:persistent="false" />
-
-        <Preference
-            android:key="power_notifications_ringtone"
-            android:title="@string/power_notifications_ringtone_title"
-            android:dependency="power_notifications"
-            android:persistent="false" />
+        <com.android.settings.preference.AppSelectListPreference
+            android:key="headset_plug"
+            android:title="@string/headset_plug_enable_title"
+            android:positiveButtonText="@string/headset_plug_positive_title"
+            settings:neutralButtonText="@string/headset_plug_neutral_title"
+            settings:neutralButtonValue="SYSTEM_DEFAULT"
+            android:persistent="false"/>
 
     </PreferenceCategory>
 
