@@ -794,9 +794,6 @@ USB networks). This setting is reset on reboot</string>
     <string name="partition_info_sdcard">/sdcard (FAT)</string>
     <string name="partition_info_sdext">/sd-ext (EXT)</string>
     <string name="partition_info_used_of">/</string>
-   
-    <!-- Bluetooth: Accept all files -->
-    <string name="bluetooth_accept_all_files">Accept all file types</string>
 
     <!-- Notification Panel Shortcuts -->
     <string name="notification_bar_shortcuts">Header shortcuts</string>
