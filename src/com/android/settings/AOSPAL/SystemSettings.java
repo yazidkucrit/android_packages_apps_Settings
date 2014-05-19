@@ -28,6 +28,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     private static final String KEY_REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
     private static final String TELO_RADIO_SETTINGS = "telo_radio_settings";
     private static final String RECENT_MENU_CLEAR_ALL_LOCATION = "recent_menu_clear_all_location";
+    private static final String INACCURATE_PROXIMITY_SENSOR = "inaccurate_proximity_sensor";
     private static final String GENERAL_CATEGORY = "general_category";
 
     private CheckBoxPreference mReverseDefaultAppPicker;
@@ -45,10 +46,6 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         PreferenceScreen systemSettings = (PreferenceScreen) findPreference(SYSTEM_SETTINGS);
         PreferenceCategory generalCategory = (PreferenceCategory) findPreference(GENERAL_CATEGORY);
 
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-            systemSettings.removePreference(findPreference(TELO_RADIO_SETTINGS));
-        }
-
         mReverseDefaultAppPicker = (CheckBoxPreference) findPreference(KEY_REVERSE_DEFAULT_APP_PICKER);
         mReverseDefaultAppPicker.setChecked(Settings.System.getInt(getContentResolver(),
                     Settings.System.REVERSE_DEFAULT_APP_PICKER, 0) != 0);
@@ -59,6 +56,14 @@ public class SystemSettings extends SettingsPreferenceFragment implements
              mRecentClearAllPosition.setValue(recentClearAllPosition);
         }
         mRecentClearAllPosition.setOnPreferenceChangeListener(this);
+
+        boolean hasProximitySensor = getPackageManager().hasSystemFeature(PackageManager.FEATURE_SENSOR_PROXIMITY);
+        boolean hasTelephony = getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+        if (!hasTelephony) {
+            systemSettings.removePreference(findPreference(TELO_RADIO_SETTINGS));
+        } else if (!hasProximitySensor) {
+            generalCategory.removePreference(findPreference(INACCURATE_PROXIMITY_SENSOR));
+        }
     }
 
     @Override

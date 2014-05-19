@@ -63,6 +63,12 @@
             android:defaultValue="0"
             android:dependency="recent_menu_clear_all" />
 
+        <!-- Proximity wake workaround -->
+        <com.android.settings.preference.SystemCheckBoxPreference
+            android:key="inaccurate_proximity_sensor"
+            android:title="@string/is_inaccurate_proximity_title"
+            android:summary="@string/is_inaccurate_proximity_summary" />
+
    </PreferenceCategory>
 
 </PreferenceScreen>

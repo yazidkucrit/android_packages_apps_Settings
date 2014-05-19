@@ -487,9 +487,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             } catch (NumberFormatException e) {
                 Log.e(TAG, "could not persist screen timeout setting", e);
             }
-        }
-        if (KEY_FONT_SIZE.equals(key)) {
+        } else if (KEY_FONT_SIZE.equals(key)) {
             writeFontSizePreference(objValue);
+        } else if (KEY_IS_INACCURATE_PROXIMITY.equals(key)) {
+             Settings.System.putInt(getContentResolver(),
+                     Settings.System.INACCURATE_PROXIMITY_WORKAROUND,
+                     ((Boolean) objValue).booleanValue() ? 1 : 0);
         }
         return true;
     }

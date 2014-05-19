@@ -879,4 +879,8 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="recent_clear_all_button_location_top_right">Top right</string>
     <string name="recent_clear_all_button_location_bottom_left">Bottom left</string>
     <string name="recent_clear_all_button_location_bottom_right">Bottom right</string>
+
+     <!-- Proximity work-around -->
+     <string name="is_inaccurate_proximity_title" translatable="false">Inaccurate proximity</string>
+     <string name="is_inaccurate_proximity_summary" translatable="false">Work-around for inaccurate proximity sensors: this will force phone to turn on the screen after the call has ended.</string>
 </resources>
