@@ -24,13 +24,13 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -102,11 +102,11 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private ListPreference mScreenTimeoutPreference;
     private Preference mScreenSaverPreference;
 
-    private PackageStatusReceiver mPackageStatusReceiver;
-    private IntentFilter mIntentFilter;
-
     private CheckBoxPreference mAdaptiveBacklight;
     private CheckBoxPreference mTapToWake;
+
+    private PackageStatusReceiver mPackageStatusReceiver;
+    private IntentFilter mIntentFilter;
 
     private ContentObserver mAccelerometerRotationObserver =
             new ContentObserver(new Handler()) {
@@ -507,14 +507,27 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         return false;
     }
 
-    public class PackageStatusReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
-                updatePeekCheckbox();
-            } else if(action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
-                updatePeekCheckbox();
+    /**
+     * Restore the properties associated with this preference on boot
+     * @param ctx A valid context
+     */
+    public static void restore(Context ctx) {
+        if (isAdaptiveBacklightSupported()) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+            final boolean enabled = prefs.getBoolean(KEY_ADAPTIVE_BACKLIGHT, true);
+            if (!AdaptiveBacklight.setEnabled(enabled)) {
+                Log.e(TAG, "Failed to restore adaptive backlight settings.");
+            } else {
+                Log.d(TAG, "Adaptive backlight settings restored.");
+            }
+        }
+        if (isTapToWakeSupported()) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+            final boolean enabled = prefs.getBoolean(KEY_TAP_TO_WAKE, true);
+            if (!TapToWake.setEnabled(enabled)) {
+                Log.e(TAG, "Failed to restore tap-to-wake settings.");
+            } else {
+                Log.d(TAG, "Tap-to-wake settings restored.");
             }
         }
     }
@@ -546,30 +559,15 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             // Hardware abstraction framework not installed
             return false;
         }
-    }
 
-    /**
-     * Restore the properties associated with this preference on boot
-     * @param ctx A valid context
-     */
-    public static void restore(Context ctx) {
-        if (AdaptiveBacklight.isSupported()) {
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-            final boolean enabled = prefs.getBoolean(KEY_ADAPTIVE_BACKLIGHT, true);
-            if (!AdaptiveBacklight.setEnabled(enabled)) {
-                Log.e(TAG, "Failed to restore adaptive backlight settings.");
-            } else {
-                Log.d(TAG, "Adaptive backlight settings restored.");
-            }
-        }
-        if (isTapToWakeSupported()) {
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-            final boolean enabled = prefs.getBoolean(KEY_TAP_TO_WAKE, true);
-            if (!TapToWake.setEnabled(enabled)) {
-                Log.e(TAG, "Failed to restore tap-to-wake settings.");
-            } else {
-                Log.d(TAG, "Tap-to-wake settings restored.");
-
+    public class PackageStatusReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
+                updatePeekCheckbox();
+            } else if(action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                updatePeekCheckbox();
             }
         }
     }
