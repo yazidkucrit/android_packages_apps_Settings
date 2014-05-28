@@ -870,4 +870,13 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="headset_plug_neutral_summary" translatable="false">System default music app</string>
     <string name="headset_plug_music_active_title" translatable="false">Disable on active audio</string>
     <string name="headset_plug_music_active_summary" translatable="false">Dont run shortcut on active audio playback</string>
+
+    <!--  Recents clear all -->
+    <string name="recents_panel_settings_title">Recents panel</string>
+    <string name="recent_clear_all_button_location_title">Clear all button position</string>
+    <string name="recent_clear_all_button_location_summary">Choose in which corner the clear all recent apps button is shown</string>
+    <string name="recent_clear_all_button_location_top_left">Top left</string>
+    <string name="recent_clear_all_button_location_top_right">Top right</string>
+    <string name="recent_clear_all_button_location_bottom_left">Bottom left</string>
+    <string name="recent_clear_all_button_location_bottom_right">Bottom right</string>
 </resources>

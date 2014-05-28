@@ -27,8 +27,11 @@ public class SystemSettings extends SettingsPreferenceFragment implements
 
     private static final String KEY_REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
     private static final String TELO_RADIO_SETTINGS = "telo_radio_settings";
+    private static final String RECENT_MENU_CLEAR_ALL_LOCATION = "recent_menu_clear_all_location";
+    private static final String GENERAL_CATEGORY = "general_category";
 
     private CheckBoxPreference mReverseDefaultAppPicker;
+    private ListPreference mRecentClearAllPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         PreferenceScreen prefs = getPreferenceScreen();
 
         PreferenceScreen systemSettings = (PreferenceScreen) findPreference(SYSTEM_SETTINGS);
+        PreferenceCategory generalCategory = (PreferenceCategory) findPreference(GENERAL_CATEGORY);
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
             systemSettings.removePreference(findPreference(TELO_RADIO_SETTINGS));
@@ -48,15 +52,29 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         mReverseDefaultAppPicker = (CheckBoxPreference) findPreference(KEY_REVERSE_DEFAULT_APP_PICKER);
         mReverseDefaultAppPicker.setChecked(Settings.System.getInt(getContentResolver(),
                     Settings.System.REVERSE_DEFAULT_APP_PICKER, 0) != 0);
+
+        mRecentClearAllPosition = (ListPreference) prefs.findPreference(RECENT_MENU_CLEAR_ALL_LOCATION);
+        String recentClearAllPosition = Settings.System.getString(resolver, Settings.System.CLEAR_RECENTS_BUTTON_LOCATION);
+        if (recentClearAllPosition != null) {
+             mRecentClearAllPosition.setValue(recentClearAllPosition);
+        }
+        mRecentClearAllPosition.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        updateClearAllButtonPositionOptions()
     }
 
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return false;
+    public boolean onPreferenceChange(Preference preference, Object objValue) {
+        ContentResolver resolver = getActivity().getContentResolver();
+        if (preference == mRecentClearAllPosition) {
+            String value = (String) objValue;
+            Settings.System.putString(resolver, Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, value);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -68,5 +86,14 @@ public class SystemSettings extends SettingsPreferenceFragment implements
             return super.onPreferenceTreeClick(preferenceScreen, preference);
         }
         return true;
+    }
+
+    public void updateClearAllButtonPositionOptions() {
+        int alternativeClearRecentsAllEnabled = Settings.System.getInt(getActivity().getContentResolver(),
+               Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 1) == 1;
+        if (!alternativeClearRecentsAllEnabled) {
+            mRecentClearAllPosition.setEnabled(false);
+        } else {
+        }
     }
 }
