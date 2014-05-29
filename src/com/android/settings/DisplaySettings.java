@@ -120,16 +120,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         return isPackageInstalled(PEEK_APPLICATION);
     }
 
-    private boolean isPackageInstalled(String packagename) {
-        PackageManager pm = getActivity().getPackageManager();
-        try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (NameNotFoundException e) {
-            return false;
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -489,10 +479,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             }
         } else if (KEY_FONT_SIZE.equals(key)) {
             writeFontSizePreference(objValue);
-        } else if (KEY_IS_INACCURATE_PROXIMITY.equals(key)) {
-             Settings.System.putInt(getContentResolver(),
-                     Settings.System.INACCURATE_PROXIMITY_WORKAROUND,
-                     ((Boolean) objValue).booleanValue() ? 1 : 0);
         }
         return true;
     }

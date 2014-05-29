@@ -64,12 +64,13 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         } else if (!hasProximitySensor) {
             generalCategory.removePreference(findPreference(INACCURATE_PROXIMITY_SENSOR));
         }
+        updateClearAllButtonPositionOptions();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateClearAllButtonPositionOptions()
+        updateClearAllButtonPositionOptions();
     }
 
     public boolean onPreferenceChange(Preference preference, Object objValue) {
@@ -94,11 +95,12 @@ public class SystemSettings extends SettingsPreferenceFragment implements
     }
 
     public void updateClearAllButtonPositionOptions() {
-        int alternativeClearRecentsAllEnabled = Settings.System.getInt(getActivity().getContentResolver(),
-               Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 1) == 1;
-        if (!alternativeClearRecentsAllEnabled) {
-            mRecentClearAllPosition.setEnabled(false);
+        boolean alternativeClearRecentsAllEnabled = Settings.System.getInt(getActivity().getContentResolver(),
+               Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 0) == 1;
+        if (alternativeClearRecentsAllEnabled) {
+            mRecentClearAllPosition.setEnabled(true);
         } else {
+            mRecentClearAllPosition.setEnabled(false);
         }
     }
 }
