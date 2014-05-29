@@ -60,8 +60,7 @@
             android:summary="@string/recent_clear_all_button_location_summary"
             android:entries="@array/recent_clear_all_button_location_entries"
             android:entryValues="@array/recent_clear_all_button_location_values"
-            android:defaultValue="0"
-            android:dependency="recent_menu_clear_all" />
+            android:defaultValue="0" />
 
         <!-- Proximity wake workaround -->
         <com.android.settings.preference.SystemCheckBoxPreference

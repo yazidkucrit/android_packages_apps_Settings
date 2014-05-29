@@ -41,7 +41,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.settings.preference.SystemCheckBoxPreference;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.internal.util.paranoid.DeviceUtils;
@@ -59,30 +58,20 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
     private static final String NAVBAR_SETTINGS = "navbar_settings";
     private static final String KEY_NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
     private static final String NAVIGATION_BAR_CATEGORY = "navigation_bar";
-    private static final String NAVIGATION_BAR_EDIT = "navigation_bar";
-    private static final String NAVIGATION_BAR_INFO = "navigation_bar_info";
     private static final String NAVIGATION_BAR_LEFT = "navigation_bar_left";
-    private static final String NAVIGATION_RING_SHORTCUTS = "navigation_ring_shortcuts";
+    private static final String NAVIGATION_BAR_INFO = "navigation_bar_info";
     private static final String ENABLE_NAVIGATION_BAR = "enable_nav_bar";
     private static final String CATEGORY_NAVBAR_GENERAL = "category_navbar_general";
     private static final String CATEGORY_NAVBAR_CONTROLS = "category_navbar_controls";
 
     private SeekBarPreference mNavigationBarHeight;
     private CheckBoxPreference mEnableNavigationBar;
- 
-    private Preference mNavRingShortcuts;
-    private Preference mNavBarEdit;
-    private SystemCheckBoxPreference mNavBarLeft;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.navbar_settings);
-
-        mNavRingShortcuts = (Preference) findPreference(NAVIGATION_RING_SHORTCUTS);
-        mNavBarEdit = (Preference) findPreference(NAVIGATION_BAR_EDIT);
-        mNavBarLeft = (SystemCheckBoxPreference) findPreference(NAVIGATION_BAR_LEFT);
 
         mNavigationBarHeight = (SeekBarPreference) findPreference(KEY_NAVIGATION_BAR_HEIGHT);
         mNavigationBarHeight.setProgress((int)(Settings.System.getFloat(getContentResolver(),
@@ -99,11 +88,12 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
         mEnableNavigationBar.setOnPreferenceChangeListener(this);
 
         PreferenceScreen navbarSettings = (PreferenceScreen) findPreference(NAVBAR_SETTINGS);
+
         PreferenceCategory generalCategory = (PreferenceCategory) findPreference(CATEGORY_NAVBAR_GENERAL);
 
         if (!DeviceUtils.isPhone(getActivity())) {
             navbarSettings.removePreference(findPreference(CATEGORY_NAVBAR_CONTROLS));
-        } else if (KeyDisabler.isSupported() || hasNavBarByDefault == true) {
+        } else  if (KeyDisabler.isSupported() || hasNavBarByDefault == true) {
             generalCategory.removePreference(mEnableNavigationBar);
         } else if (!KeyDisabler.isSupported() || hasNavBarByDefault == true) {
             navbarSettings.removePreference(findPreference(NAVIGATION_BAR_INFO));
@@ -128,9 +118,6 @@ public class NavBarSettings extends SettingsPreferenceFragment implements
                     Settings.System.DEV_FORCE_SHOW_NAVBAR,
                     ((Boolean) newValue) ? 1 : 0);
             mNavigationBarHeight.setEnabled((Boolean)newValue);
-            mNavRingShortcuts.setEnabled(mEnableNavigationBar.isChecked());
-            mNavBarEdit.setEnabled(mEnableNavigationBar.isChecked());
-            mNavBarLeft.setEnabled(mEnableNavigationBar.isChecked());
         } else {
             return false;
         }

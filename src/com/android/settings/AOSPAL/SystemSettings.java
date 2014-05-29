@@ -81,6 +81,7 @@ public class SystemSettings extends SettingsPreferenceFragment implements
         } else {
             return false;
         }
+        return true;
     }
 
     @Override
