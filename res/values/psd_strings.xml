@@ -80,7 +80,7 @@
     <!-- Navigation bar settings -->
     <string name="navigation_bar">Navigation Bar</string>
     <string name="navigation_ring_title">Shortcuts</string>
-    <string name="navigation_bar_left_title">Left handed mode</string>
+    <string name="navigation_bar_left_title">Left-handed mode</string>
     <string name="navigation_bar_left_summary">Place the navigation bar on the left side of the screen in landscape mode</string>
     <string name="navigation_bar_height">Navigation bar height:</string>
     <string name="navbar_option_info_title">Info</string>
@@ -452,6 +452,8 @@ USB networks). This setting is reset on reboot</string>
     <string name="clock_font_light">Light</string>
     <string name="clock_font_light_italic">Light Italic</string>
     <string name="clock_font_normal">Normal</string>
+    <string name="clock_use_second">Use second clock</string>
+    <string name="clock_use_second_summary">Show second in clock</string>
 
     <!-- QuickSettings: Smart Pulldown -->
     <string name="smart_pulldown_title">Smart pulldown</string>
