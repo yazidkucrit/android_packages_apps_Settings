@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.Utils;
 import com.android.internal.policy.IKeyguardService;
 
 import java.io.File;
@@ -58,6 +59,8 @@ public class LockscreenSettings extends SettingsPreferenceFragment implements
     private static final String KEY_SELECT_LOCKSCREEN_WALLPAPER = "select_lockscreen_wallpaper";
     private static final String BATTERY_AROUND_LOCKSCREEN_RING = "battery_around_lockscreen_ring";
     private static final String KEY_UNLOCK_CATEGORY = "unlock_category";
+    private static final String KEY_LOCK_CLOCK = "lock_clock";
+    private static final String PERSONALIZE_CATEGORY = "personalize_category";
 
     private static final String KEY_SEE_THROUGH = "see_through";
     private static final String KEY_BLUR_RADIUS = "blur_radius";
@@ -85,6 +88,10 @@ public class LockscreenSettings extends SettingsPreferenceFragment implements
         }
 
     };
+
+    private boolean isLockClockAppInstalled() {
+        return isPackageInstalled("com.cyanogenmod.lockclock");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,6 +155,13 @@ public class LockscreenSettings extends SettingsPreferenceFragment implements
                 Settings.System.LOCKSCREEN_BLUR_RADIUS, 12));
         mBlurRadius.setOnPreferenceChangeListener(this);
         mBlurRadius.setEnabled(mSeeThrough.isChecked() && mSeeThrough.isEnabled());
+
+        PreferenceCategory personalizeCategory = (PreferenceCategory) findPreference(PERSONALIZE_CATEGORY);
+
+        // Only add if device has LockClock installed
+        if (!isLockClockAppInstalled()) {
+            personalizeCategory.removePreference(findPreference(KEY_LOCK_CLOCK));
+        }
 
     }
 
