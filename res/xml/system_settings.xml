@@ -57,7 +57,6 @@
         <ListPreference
             android:key="recent_menu_clear_all_location"
             android:title="@string/recent_clear_all_button_location_title"
-            android:summary="@string/recent_clear_all_button_location_summary"
             android:entries="@array/recent_clear_all_button_location_entries"
             android:entryValues="@array/recent_clear_all_button_location_values"
             android:defaultValue="0" />

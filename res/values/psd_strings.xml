@@ -815,6 +815,7 @@ USB networks). This setting is reset on reboot</string>
 
     <!--  Recents clear all -->
     <string name="recents_panel_settings_title">Recents panel</string>
+    <string name="recent_clear_all_disabled">Alternative recents clear all is disabled</string>
     <string name="recent_clear_all_button_location_title">Clear all button position</string>
     <string name="recent_clear_all_button_location_summary">Choose in which corner the clear all recent apps button is shown</string>
     <string name="recent_clear_all_button_location_top_left">Top left</string>

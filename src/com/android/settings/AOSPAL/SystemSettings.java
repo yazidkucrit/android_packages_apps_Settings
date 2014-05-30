@@ -100,8 +100,10 @@ public class SystemSettings extends SettingsPreferenceFragment implements
                Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 0) == 1;
         if (alternativeClearRecentsAllEnabled) {
             mRecentClearAllPosition.setEnabled(true);
+            mRecentClearAllPosition.setSummary(R.string.recent_clear_all_button_location_summary);
         } else {
             mRecentClearAllPosition.setEnabled(false);
+            mRecentClearAllPosition.setSummary(R.string.recent_clear_all_disabled);
         }
     }
 }
