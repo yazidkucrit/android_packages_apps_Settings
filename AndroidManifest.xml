@@ -1677,6 +1677,8 @@
         <activity android:name=".chameleonos.labs.gestureanywhere.GestureAnywhereCreateGestureActivity" />
 
 	    <activity android:name=".AOSPAL.RamBar" />
+	    
+	    <activity android:name=".paranoid.Halo" />
 	
 	    <activity
             android:name="com.android.settings.Nyandroid"
